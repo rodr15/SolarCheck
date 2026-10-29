@@ -11,7 +11,6 @@ class RegisterFormScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      // 1. Aquí se crea e inyecta la única instancia del Bloc mediante GetIt
       create: (_) => sl<RegisterFormBloc>(),
       child: Scaffold(
         body: Padding(
@@ -20,23 +19,15 @@ class RegisterFormScreen extends StatelessWidget {
             listener: (context, state) {
               if (state.status.isSuccess) {
                 context.read<StartUpBloc>()..add(StartUpEvent.started());
-                print('Go to other route');
               }
             },
-
-            // 2. BORRADO: Ya no pases 'bloc: sl<...>()'. BlocBuilder buscará automáticamente en el context.
             builder: (context, state) {
-              // 3. OBTENER EL BLOC CORRECTO: Buscamos el Bloc que provee el BlocProvider de arriba
               final bloc = context.read<RegisterFormBloc>();
-
-              print(
-                  'from bloc ${state.isValid}'); // Usa directamente el state del builder
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Campo de Nombre
                   TextField(
                     onChanged: (value) =>
                         bloc.add(RegisterFormEvent.nameChanged(value)),
@@ -50,8 +41,6 @@ class RegisterFormScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-
-                  // Campo de Correo
                   TextField(
                     onChanged: (value) =>
                         bloc.add(RegisterFormEvent.emailChanged(value)),
@@ -66,8 +55,6 @@ class RegisterFormScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-
-                  // Botón de Envío / Guardado
                   ElevatedButton(
                     onPressed: state.isValid
                         ? () =>

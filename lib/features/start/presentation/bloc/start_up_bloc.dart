@@ -18,7 +18,6 @@ class StartUpBloc extends Bloc<StartUpEvent, StartUpState> {
   }
 
   Future<void> _onStarted(_Started event, Emitter<StartUpState> emit) async {
-    print('ON ESTARTED');
     Either<UserEntity, String> user = await _getUserUseCase.call();
     user.match((user) => emit(_Logged()), (error) => emit(_Unlogged()));
   }
