@@ -36,6 +36,12 @@ class RegisterFormBloc extends Bloc<RegisterFormEvent, RegisterFormState> {
     RegisterFormEvent event,
     Emitter<RegisterFormState> emit,
   ) {
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    final isValid = Formz.validate([state.name, state.email]);
+    if (!isValid) {
+      emit(state.copyWith(status: FormzSubmissionStatus.failure));
+      return;
+    }
     try {
       final UserEntity entity =
           UserEntity(name: state.name.value, email: state.email.value);
@@ -45,9 +51,5 @@ class RegisterFormBloc extends Bloc<RegisterFormEvent, RegisterFormState> {
     } catch (_) {
       emit(state.copyWith(status: FormzSubmissionStatus.failure));
     }
-  }
-
-  bool _isValid() {
-    return Formz.validate([state.name, state.email]);
   }
 }
