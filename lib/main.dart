@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
+import 'package:solar_check/core/di/hive_initializer.dart';
+import 'package:solar_check/core/presentation/bloc/bloc_observer.dart';
 import 'package:solar_check/core/router/router.dart';
 import 'package:solar_check/core/theme/theme.dart';
-import 'package:solar_check/features/start/bloc/start_up_bloc.dart';
+import 'package:solar_check/features/start/presentation/bloc/start_up_bloc.dart';
+
 import 'core/di/injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // (Opcional) Inicializa Hive aquí si lo usas:
-  // await Hive.initFlutter();
-  // await Hive.openBox('settings_box');
-
+  await Hive.initFlutter();
+  await HiveInitializer.init(sl);
   configureDependencies();
+
+  Bloc.observer = sl<AppBlocObserver>();
 
   runApp(const MyApp());
 }
@@ -38,8 +41,7 @@ class MyAppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final startupBloc = context.read<StartUpBloc>()
-      ..add(StartUpEvent.started());
+    final startupBloc = sl<StartUpBloc>()..add(StartUpEvent.started());
     final router = createRouter(startupBloc);
 
     return MaterialApp.router(

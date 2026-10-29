@@ -2,15 +2,21 @@ import 'package:bloc/bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:solar_check/core/inputs/inputs.dart';
+import 'package:solar_check/core/formz_inputs/inputs.dart';
+import 'package:solar_check/core/user/domain/entities/user.entity.dart';
+import 'package:solar_check/core/user/domain/usecases/save_user.usecase.dart';
 
 part 'register_form_event.dart';
 part 'register_form_state.dart';
 part 'register_form_bloc.freezed.dart';
 
-@injectable
+@singleton
 class RegisterFormBloc extends Bloc<RegisterFormEvent, RegisterFormState> {
-  RegisterFormBloc() : super(RegisterFormState()) {
+  final SaveUserUseCase _saveUserUseCase;
+
+  RegisterFormBloc({required SaveUserUseCase saveRegisterUseCase})
+      : _saveUserUseCase = saveRegisterUseCase,
+        super(RegisterFormState()) {
     on<_NameChanged>(_onNameChanged);
     on<_EmailChanged>(_onEmailChanged);
     on<_FormSubmitted>(_onFormSubmitted);
@@ -18,7 +24,6 @@ class RegisterFormBloc extends Bloc<RegisterFormEvent, RegisterFormState> {
 
   void _onNameChanged(_NameChanged event, Emitter<RegisterFormState> emit) {
     final name = NameInput.dirty(event.name);
-
     emit(state.copyWith(name: name));
   }
 
@@ -27,22 +32,22 @@ class RegisterFormBloc extends Bloc<RegisterFormEvent, RegisterFormState> {
     emit(state.copyWith(email: email));
   }
 
-  Future<void> _onFormSubmitted(
+  void _onFormSubmitted(
     RegisterFormEvent event,
     Emitter<RegisterFormState> emit,
-  ) async {
-    final isValid = Formz.validate([state.name, state.email]);
-    if (!isValid) return;
-
-    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-
+  ) {
     try {
-      /* [ASRF] TODO: Save the info in the db */
-      await Future.delayed(const Duration(seconds: 1));
+      final UserEntity entity =
+          UserEntity(name: state.name.value, email: state.email.value);
+      _saveUserUseCase.call(entity);
 
       emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (_) {
       emit(state.copyWith(status: FormzSubmissionStatus.failure));
     }
+  }
+
+  bool _isValid() {
+    return Formz.validate([state.name, state.email]);
   }
 }
