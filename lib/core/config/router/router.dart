@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
-import 'package:solar_check/core/router/router_stream.dart';
+import 'package:solar_check/core/config/router/router_stream.dart';
+import 'package:solar_check/core/user/presentation/bloc/auth_bloc.dart';
+import 'package:solar_check/features/landing/presentation/screen/landing.screen.dart';
 import 'package:solar_check/features/start/presentation/screen/loading.screen.dart';
 import 'package:solar_check/features/register/presentation/screens/register.screen.dart';
-import 'package:solar_check/features/start/presentation/bloc/start_up_bloc.dart';
 
-final _logger = Logger(
-  printer: PrettyPrinter(methodCount: 0, colors: true, printEmojis: true),
-);
+final Logger _logger = GetIt.I<Logger>();
 
-GoRouter createRouter(StartUpBloc appBloc) {
+GoRouter createRouter() {
+  final authBloc = GetIt.I<AuthBloc>();
+
   return GoRouter(
     initialLocation: '/loading',
-    refreshListenable: GoRouterRefreshStream(appBloc.stream),
+    refreshListenable: GoRouterRefreshStream(authBloc.stream),
     redirect: (context, state) {
-      final appState = appBloc.state;
+      final appState = authBloc.state;
 
       final targetPath = appState.when(
-        initial: () => '/loading',
-        logged: () => '/',
-        unlogged: () => '/login',
+        authenticated: (_, __) => '/',
+        unauthenticated: () => '/login',
+        loading: () => '/loading',
       );
+
       if (state.matchedLocation != targetPath) {
         _logger.i('🔀 Redirección GoRouter:\n'
             '   🔹 Estado Bloc: ${appState.runtimeType}\n'
@@ -36,6 +39,10 @@ GoRouter createRouter(StartUpBloc appBloc) {
     ],
     routes: [
       GoRoute(
+        path: '/',
+        builder: (context, state) => const LandingScreen(),
+      ),
+      GoRoute(
         path: '/loading',
         builder: (context, state) => const LoadingScreen(),
       ),
@@ -43,6 +50,10 @@ GoRouter createRouter(StartUpBloc appBloc) {
         path: '/login',
         builder: (context, state) => const RegisterFormScreen(),
       ),
+      // GoRoute(
+      //   path: '/createProject',
+      //   builder: (context, state) => const RegisterFormScreen(),
+      // ),
     ],
   );
 }

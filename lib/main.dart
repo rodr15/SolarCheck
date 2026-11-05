@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_ce_flutter.dart';
-import 'package:solar_check/core/di/hive_initializer.dart';
-import 'package:solar_check/core/presentation/bloc/bloc_observer.dart';
-import 'package:solar_check/core/router/router.dart';
-import 'package:solar_check/core/theme/theme.dart';
-import 'package:solar_check/features/start/presentation/bloc/start_up_bloc.dart';
+import 'package:solar_check/core/config/di/hive_initializer.dart';
+import 'package:solar_check/core/config/observer/bloc_observer.dart';
+import 'package:solar_check/core/config/router/router.dart';
+import 'package:solar_check/core/config/theme/theme.dart';
+import 'package:solar_check/core/user/presentation/bloc/auth_bloc.dart';
 
-import 'core/di/injection.dart';
+import 'core/config/di/injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await HiveInitializer.init(sl);
-  configureDependencies();
+  await configureDependencies();
 
   Bloc.observer = sl<AppBlocObserver>();
 
@@ -27,8 +28,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<StartUpBloc>(
-          create: (_) => sl<StartUpBloc>(),
+        BlocProvider<AuthBloc>(
+          create: (_) => sl<AuthBloc>(),
         ),
       ],
       child: const MyAppView(),
@@ -41,8 +42,8 @@ class MyAppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final startupBloc = sl<StartUpBloc>()..add(StartUpEvent.started());
-    final router = createRouter(startupBloc);
+    context.read<AuthBloc>().add(AuthEvent.validate());
+    final router = createRouter();
 
     return MaterialApp.router(
       title: 'Clean Architecture App',

@@ -1,7 +1,7 @@
 import 'package:hive_ce/hive_ce.dart';
 import 'package:injectable/injectable.dart';
-import '../../../constants/hive_boxes.dart';
-import '../../../constants/hive_keys.dart';
+import '../../../config/constants/hive_boxes.dart';
+import '../../../config/constants/hive_keys.dart';
 
 abstract class UserLocalDataSource {
   Future<void> saveUser({required String name, required String email});

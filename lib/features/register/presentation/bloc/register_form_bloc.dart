@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:solar_check/core/formz_inputs/inputs.dart';
+import 'package:solar_check/core/config/formz_inputs/inputs.dart';
 import 'package:solar_check/core/user/domain/entities/user.entity.dart';
 import 'package:solar_check/core/user/domain/usecases/save_user.usecase.dart';
 

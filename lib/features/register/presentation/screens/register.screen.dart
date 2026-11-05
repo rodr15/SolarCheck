@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:solar_check/core/di/injection.dart';
+import 'package:solar_check/core/config/di/injection.dart';
+import 'package:solar_check/core/user/presentation/bloc/auth_bloc.dart';
 import 'package:solar_check/features/register/presentation/bloc/register_form_bloc.dart';
-import 'package:solar_check/features/start/presentation/bloc/start_up_bloc.dart';
 
 class RegisterFormScreen extends StatelessWidget {
   const RegisterFormScreen({super.key});
@@ -18,7 +18,7 @@ class RegisterFormScreen extends StatelessWidget {
           child: BlocConsumer<RegisterFormBloc, RegisterFormState>(
             listener: (context, state) {
               if (state.status.isSuccess) {
-                context.read<StartUpBloc>()..add(StartUpEvent.started());
+                context.read<AuthBloc>().add(AuthEvent.validate());
               }
             },
             builder: (context, state) {
