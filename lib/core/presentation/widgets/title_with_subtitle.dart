@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class TitleWithSubtitle extends StatelessWidget {
   final String title;
@@ -106,7 +107,7 @@ class LandingEmptyProjects extends StatelessWidget {
                   ],
                 ),
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => context.goNamed('CreateProject'),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

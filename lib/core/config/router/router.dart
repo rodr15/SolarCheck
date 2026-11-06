@@ -5,8 +5,8 @@ import 'package:logger/logger.dart';
 import 'package:solar_check/core/config/router/router_stream.dart';
 import 'package:solar_check/core/user/presentation/bloc/auth_bloc.dart';
 import 'package:solar_check/features/landing/presentation/screen/landing.screen.dart';
-import 'package:solar_check/features/projects/screens/create_project.screen.dart';
-import 'package:solar_check/features/projects/screens/inspection.screen.dart';
+import 'package:solar_check/features/projects/presentation/screens/create_project.screen.dart';
+import 'package:solar_check/features/projects/presentation/screens/inspection.screen.dart';
 import 'package:solar_check/features/start/presentation/screen/loading.screen.dart';
 import 'package:solar_check/features/register/presentation/screens/register.screen.dart';
 

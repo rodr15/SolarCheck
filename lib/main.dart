@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:solar_check/core/config/di/hive_initializer.dart';
 import 'package:solar_check/core/config/observer/bloc_observer.dart';

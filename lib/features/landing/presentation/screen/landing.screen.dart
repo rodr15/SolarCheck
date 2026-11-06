@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:solar_check/core/presentation/widgets/global_widgets.dart';
-import 'package:solar_check/core/user/presentation/bloc/auth_bloc.dart'; // Tu bloc global
+import 'package:solar_check/core/user/presentation/bloc/auth_bloc.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -39,8 +39,8 @@ class LandingScreen extends StatelessWidget {
 
                       // If theres no projects
 
-                      // LandingEmptyProjects()
-                      LandingProjects()
+                      LandingEmptyProjects()
+                      // LandingProjects()
                     ],
                   ),
                 ),

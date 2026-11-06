@@ -6,11 +6,11 @@ import 'package:solar_check/core/config/formz_inputs/inputs.dart';
 import 'package:solar_check/core/user/domain/entities/user.entity.dart';
 import 'package:solar_check/core/user/domain/usecases/save_user.usecase.dart';
 
+part 'register_form_bloc.freezed.dart';
 part 'register_form_event.dart';
 part 'register_form_state.dart';
-part 'register_form_bloc.freezed.dart';
 
-@singleton
+@injectable
 class RegisterFormBloc extends Bloc<RegisterFormEvent, RegisterFormState> {
   final SaveUserUseCase _saveUserUseCase;
 

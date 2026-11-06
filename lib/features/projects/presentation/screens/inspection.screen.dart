@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solar_check/core/presentation/widgets/title_with_subtitle.dart';
-import 'package:solar_check/features/projects/widgets/option_card.dart';
+import 'package:solar_check/features/projects/presentation/widgets/option_card.dart';
 
 class Inspection extends StatelessWidget {
   const Inspection({super.key});
@@ -57,6 +57,7 @@ class Inspection extends StatelessWidget {
                 children: [
                   OptionCard(
                     text: 'Aprobado',
+                    value: 'Aprobado',
                     icon: Icons.done,
                     isSelected: false,
                     color: Theme.of(context).colorScheme.primary,
@@ -64,6 +65,7 @@ class Inspection extends StatelessWidget {
                   ),
                   OptionCard(
                     text: 'No Aprobado',
+                    value: 'No Aprobado',
                     icon: Icons.close,
                     isSelected: false,
                     color: Colors.red,
@@ -71,6 +73,7 @@ class Inspection extends StatelessWidget {
                   ),
                   OptionCard(
                     text: 'Pendiente',
+                    value: 'Pendiente',
                     icon: Icons.query_builder_outlined,
                     isSelected: false,
                     color: Colors.orange,
