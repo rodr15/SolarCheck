@@ -9,9 +9,9 @@ class HiveInitializer {
   static Future<void> init(GetIt sl) async {
     await Hive.initFlutter();
 
-    if (kDebugMode) {
-      await Hive.deleteBoxFromDisk(HiveBoxes.settings);
-    }
+    // if (kDebugMode) {
+    //   await Hive.deleteBoxFromDisk(HiveBoxes.settings);
+    // }
     await configureHiveBoxes(sl);
   }
 

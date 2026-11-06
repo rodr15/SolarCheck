@@ -5,6 +5,8 @@ import 'package:logger/logger.dart';
 import 'package:solar_check/core/config/router/router_stream.dart';
 import 'package:solar_check/core/user/presentation/bloc/auth_bloc.dart';
 import 'package:solar_check/features/landing/presentation/screen/landing.screen.dart';
+import 'package:solar_check/features/projects/screens/create_project.screen.dart';
+import 'package:solar_check/features/projects/screens/inspection.screen.dart';
 import 'package:solar_check/features/start/presentation/screen/loading.screen.dart';
 import 'package:solar_check/features/register/presentation/screens/register.screen.dart';
 
@@ -14,25 +16,35 @@ GoRouter createRouter() {
   final authBloc = GetIt.I<AuthBloc>();
 
   return GoRouter(
-    initialLocation: '/loading',
+    initialLocation: '/',
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
     redirect: (context, state) {
       final appState = authBloc.state;
+      final currentPath = state.matchedLocation;
 
-      final targetPath = appState.when(
-        authenticated: (_, __) => '/',
-        unauthenticated: () => '/login',
-        loading: () => '/loading',
+      final redirectPath = appState.when(
+        loading: () {
+          return currentPath != '/loading' ? '/loading' : null;
+        },
+        unauthenticated: () {
+          return currentPath != '/login' ? '/login' : null;
+        },
+        authenticated: (_, __) {
+          if (currentPath == '/login' || currentPath == '/loading') {
+            return '/';
+          }
+          return null;
+        },
       );
 
-      if (state.matchedLocation != targetPath) {
+      if (redirectPath != null && redirectPath != currentPath) {
         _logger.i('🔀 Redirección GoRouter:\n'
             '   🔹 Estado Bloc: ${appState.runtimeType}\n'
-            '   📍 Ruta Actual: ${state.matchedLocation}\n'
-            '   ➡️ Nueva Ruta:  $targetPath');
+            '   📍 Ruta Actual: $currentPath\n'
+            '   ➡️ Nueva Ruta:  $redirectPath');
       }
 
-      return targetPath;
+      return redirectPath;
     },
     observers: [
       _GoRouterObserver(),
@@ -50,10 +62,16 @@ GoRouter createRouter() {
         path: '/login',
         builder: (context, state) => const RegisterFormScreen(),
       ),
-      // GoRoute(
-      //   path: '/createProject',
-      //   builder: (context, state) => const RegisterFormScreen(),
-      // ),
+      GoRoute(
+        name: 'CreateProject',
+        path: '/createProject',
+        builder: (context, state) => const CreateProject(),
+      ),
+      GoRoute(
+        name: 'Inspection',
+        path: '/inspection',
+        builder: (context, state) => const Inspection(),
+      ),
     ],
   );
 }
