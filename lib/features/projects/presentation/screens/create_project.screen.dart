@@ -32,7 +32,7 @@ class CreateProjectContent extends StatelessWidget {
       body: BlocConsumer<RegisterProjectBloc, RegisterProjectState>(
         listener: (context, state) {
           if (state.status.isSuccess) {
-            context.goNamed('Inspection');
+            context.goNamed('Catalog');
           }
         },
         builder: (context, state) {

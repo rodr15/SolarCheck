@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:solar_check/core/presentation/widgets/title_with_subtitle.dart';
 import 'package:solar_check/features/projects/presentation/widgets/option_card.dart';
 
-class Inspection extends StatelessWidget {
-  const Inspection({super.key});
+class InspectionScreen extends StatelessWidget {
+  const InspectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

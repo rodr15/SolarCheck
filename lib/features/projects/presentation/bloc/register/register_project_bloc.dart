@@ -3,15 +3,21 @@ import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:solar_check/core/config/formz_inputs/name.input.dart';
+import 'package:solar_check/features/projects/domain/entities/project.entity.dart';
+import 'package:solar_check/features/projects/domain/usecases/save_project.usecase.dart';
 
+part 'register_project_bloc.freezed.dart';
 part 'register_project_event.dart';
 part 'register_project_state.dart';
-part 'register_project_bloc.freezed.dart';
 
 @injectable
 class RegisterProjectBloc
     extends Bloc<RegisterProjectEvent, RegisterProjectState> {
-  RegisterProjectBloc() : super(RegisterProjectState()) {
+  final SaveProjectUseCase _saveProject;
+
+  RegisterProjectBloc({required SaveProjectUseCase saveProject})
+      : _saveProject = saveProject,
+        super(RegisterProjectState()) {
     on<_NameChanged>(_onNameChanged);
     on<_TypeChanged>(_onTypeChanged);
     on<_FormSubmitted>(_onFormSubmitted);
@@ -37,7 +43,8 @@ class RegisterProjectBloc
       return;
     }
     try {
-      /* [ASRF] TODO: Save in the bd */
+      final project = Project(name: state.name.value, type: state.type.value);
+      _saveProject.call(project);
       emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (_) {
       emit(state.copyWith(status: FormzSubmissionStatus.failure));
