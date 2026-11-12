@@ -7,12 +7,12 @@ import 'package:solar_check/features/projects/data/models/project.model.dart';
 
 @Injectable(as: ProjectDataSource)
 class ProjectLocalDataSource implements ProjectDataSource {
-  final Box _projectsBox;
+  final Box<ProjectModel> _projectsBox;
 
   ProjectLocalDataSource(@Named(HiveBoxes.projects) this._projectsBox);
   @override
   Future<Either<ProjectModel, String>> getProjectById(String id) async {
-    final project = await _projectsBox.get(id) as ProjectModel?;
+    final project = _projectsBox.get(id);
     if (project == null) {
       return Either.right('Error getting the inspection ');
     }
@@ -26,7 +26,7 @@ class ProjectLocalDataSource implements ProjectDataSource {
 
   @override
   Future<Either<List<ProjectModel>, String>> getAllProjects() async {
-    final projects = _projectsBox.values.toList() as List<ProjectModel>;
+    final projects = _projectsBox.values.toList();
     return Either.left(projects);
   }
 }

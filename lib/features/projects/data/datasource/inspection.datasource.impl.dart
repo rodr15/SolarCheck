@@ -7,16 +7,31 @@ import 'package:solar_check/features/projects/data/models/inspection.model.dart'
 
 @Injectable(as: InspectionDataSource)
 class InspectionLocalDataSource implements InspectionDataSource {
-  final Box _inspectionBox;
+  final Box<InspectionModel> _inspectionBox;
 
   InspectionLocalDataSource(@Named(HiveBoxes.inspections) this._inspectionBox);
 
   @override
   getInspectionById(String id) async {
-    final inspection = await _inspectionBox.get(id) as InspectionModel?;
+    final inspection = _inspectionBox.get(id);
     if (inspection == null) {
       return Either.right('Error getting the inspection ');
     }
     return Either.left(inspection);
+  }
+
+  @override
+  Future<void> saveInspection(InspectionModel inspection) async {
+    await _inspectionBox.add(inspection);
+  }
+
+  Future<List<InspectionModel>> getInspectionsByProjectId(
+      String projectId) async {
+    final inspections = _inspectionBox.values
+        .cast<InspectionModel>()
+        .where((model) => model.projectId == projectId)
+        .toList();
+
+    return inspections;
   }
 }

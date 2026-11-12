@@ -3,4 +3,5 @@ import 'package:solar_check/features/projects/domain/entities/inspection.entity.
 
 abstract class InspectionRepository {
   Future<Either<Inspection, String>> getInspection(String inspectionId);
+  Future<void> createInspection(String projectId);
 }

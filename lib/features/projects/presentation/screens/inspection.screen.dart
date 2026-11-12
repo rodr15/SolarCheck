@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:solar_check/core/config/di/injection.dart';
 import 'package:solar_check/core/presentation/widgets/title_with_subtitle.dart';
+import 'package:solar_check/features/projects/presentation/bloc/catalog/catalog_bloc.dart';
 import 'package:solar_check/features/projects/presentation/widgets/option_card.dart';
 
 class InspectionScreen extends StatelessWidget {
@@ -9,7 +12,25 @@ class InspectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Padding(
+        body: BlocProvider(
+          create: (context) => sl<CatalogBloc>(),
+          child: _InspectionScreenContent(),
+        ),
+      ),
+    );
+  }
+}
+
+class _InspectionScreenContent extends StatelessWidget {
+  const _InspectionScreenContent({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CatalogBloc, CatalogState>(
+      builder: (context, state) {
+        return Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
             spacing: 20,
@@ -83,8 +104,8 @@ class InspectionScreen extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

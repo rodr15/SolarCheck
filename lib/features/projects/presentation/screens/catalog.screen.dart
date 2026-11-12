@@ -35,6 +35,8 @@ class CatalogContent extends StatelessWidget {
       builder: (context, state) {
         return state.maybeWhen(
           loaded: (catalog) {
+            // return CollapsibleSectionWidget(
+            //     section: SectionItem.fromMap(catalog.catalog));
             return Text(catalog.catalog.toString());
           },
           error: (error) =>
@@ -58,6 +60,38 @@ class SectionItem {
     this.subSections = const [],
     this.valdation,
   });
+
+  // Constructor para mapear desde Map<String, dynamic>
+  factory SectionItem.fromMap(Map<String, dynamic> map) {
+    return SectionItem(
+      title: map['title'] ?? '',
+      description: map['description'],
+      // Si ValidationStatus es un Enum, puedes parsearlo así (asumiendo que guardas el nombre o el índice):
+      valdation: map['valdation'] != null
+          ? ValidationStatus.values.firstWhere(
+              (e) => e.name == map['valdation'],
+              orElse: () => ValidationStatus.values.first,
+            )
+          : null,
+      // Mapeo recursivo de las subsecciones
+      subSections: map['subSections'] != null
+          ? (map['subSections'] as List<dynamic>)
+              .map((subMap) =>
+                  SectionItem.fromMap(subMap as Map<String, dynamic>))
+              .toList()
+          : [],
+    );
+  }
+
+  // Opcional: Método para convertirlo nuevamente a Map (muy útil para APIs o almacenamiento local)
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'description': description,
+      'valdation': valdation?.name,
+      'subSections': subSections.map((sub) => sub.toMap()).toList(),
+    };
+  }
 }
 
 class CollapsibleSectionWidget extends StatelessWidget {

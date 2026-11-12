@@ -42,7 +42,9 @@ class LandingContent extends StatelessWidget {
                 final String name = sl<AuthBloc>().state.maybeWhen(
                     authenticated: (name, email) => name, orElse: () => '');
                 return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Cabecera fija
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -60,15 +62,21 @@ class LandingContent extends StatelessWidget {
                         ),
                       ],
                     ),
-                    projects.isEmpty
-                        ? LandingEmptyProjects()
-                        : LandingProjects(
-                            projects: projects,
-                          )
+                    const SizedBox(height: 12),
+
+                    // AQUÍ ESTÁ LA CLAVE: 'Expanded' le da un espacio delimitado
+                    // al SingleChildScrollView para que pueda hacer su trabajo de scroll.
+                    Expanded(
+                      child: projects.isEmpty
+                          ? const LandingEmptyProjects()
+                          : LandingProjects(
+                              projects: projects,
+                            ),
+                    ),
                   ],
                 );
               },
-              orElse: () => CircularProgressIndicator.adaptive());
+              orElse: () => const CircularProgressIndicator.adaptive());
         },
       ),
     );
@@ -85,56 +93,79 @@ class LandingProjects extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TitleWithSubtitle(title: 'Tus proyectos', subTitle: 'Ver todos'),
-        ...projects.map((p) => Card(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        p.name,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      Row(
+    return SingleChildScrollView(
+      child: Padding(
+        padding:
+            const EdgeInsets.symmetric(vertical: 8.0), // Margen seguro general
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const TitleWithSubtitle(
+              title: 'Tus proyectos',
+              subTitle: 'Ver todos',
+            ),
+            const SizedBox(height: 8),
+            ...projects.map((p) => Card(
+                  margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 6), // Controlamos el margen de la tarjeta
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.all(12), // Padding interno equilibrado
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          p.name,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 8),
+                        // USAMOS WRAP EN LUGAR DE ROW: Evita desbordamientos si hay muchos chips
+                        Wrap(
+                          spacing: 8.0,
+                          runSpacing: 4.0,
                           children: ValidationStatus.values
                               .map((s) => ValidateStatusChip(
                                     status: s,
                                     optionalText: '${s.text}: 0',
                                   ))
-                              .toList()),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Center(
-                            child: Text('Continuar inspeccion'),
+                              .toList(),
+                        ),
+                        const SizedBox(height: 12),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const SizedBox(
+                            width: double.infinity,
+                            child: Center(
+                              child: Text('Continuar inspeccion'),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                )),
+            const SizedBox(height: 12),
+            Center(
+              child: ElevatedButton(
+                onPressed: () => context.goNamed('CreateProject'),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.add_outlined),
+                    SizedBox(width: 8),
+                    Text('Crea nuevo proyecto'), // Corregido el typo "newo"
+                  ],
                 ),
               ),
-            )),
-        ElevatedButton(
-            onPressed: () => context.goNamed('CreateProject'),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.add_outlined),
-                Text('Crea nuevo proyecto'),
-              ],
-            )),
-      ],
+            ),
+            const SizedBox(height: 16), // Espacio inferior de respiro
+          ],
+        ),
+      ),
     );
   }
 }
