@@ -1,0 +1,421 @@
+{
+    "documentacion": [
+        {
+            "item": "CONTRATO",
+            "hasComments": true
+        },
+        {
+            "item": "DIAGRAMA UNIFILAR",
+            "hasComments": true
+        },
+        {
+            "item": "DIAGRAMA DE STRING",
+            "hasComments": true
+        },
+        {
+            "item": "PRUEBAS CALIDAD",
+            "hasComments": true
+        },
+        {
+            "item": "MANUAL DE OPERACIÓN MANTENIMIENTO",
+            "hasComments": true
+        },
+        {
+            "item": "CURVAS IV",
+            "hasComments": true
+        },
+        {
+            "item": "TERMOGRAFIAS",
+            "hasComments": true
+        },
+        {
+            "item": "CREDENCIALES Y ACCESOS",
+            "hasComments": true
+        },
+        {
+            "item": "PRUEBAS PR",
+            "hasComments": true
+        },
+        {
+            "item": "GARANTIAS",
+            "hasComments": true
+        },
+        {
+            "item": "RETIE",
+            "hasComments": true
+        },
+        {
+            "item": "POLIZAS Y SEGUROS",
+            "hasComments": true
+        },
+        {
+            "item": "CERTIFICADOS DE CALIBRACION",
+            "hasComments": true
+        },
+        {
+            "item": "CONTACTOS",
+            "hasComments": true
+        }
+    ],
+    "campo_general": [
+        {
+            "seccion": "GENERALES",
+            "items": [
+                {
+                    "item": "ACCESOS SITIO",
+                    "hasComments": true
+                },
+                {
+                    "item": "SEÑALIZACION SEGURIDAD",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTADO DE CUBIERTA",
+                    "hasComments": true
+                },
+                {
+                    "item": "VEGETACION",
+                    "hasComments": true
+                },
+                {
+                    "item": "CERCADO Y PORTONES",
+                    "hasComments": true
+                },
+                {
+                    "item": "GABINETE LLAVES DEL PROYECTO",
+                    "hasComments": true
+                },
+                {
+                    "item": "ORDEN Y LIMPIEZA",
+                    "hasComments": true
+                }
+            ]
+        },
+        {
+            "seccion": "MODULOS",
+            "items": [
+                {
+                    "item": "SUCIEDAD EN MODULOS",
+                    "hasComments": true
+                },
+                {
+                    "item": "HOTSPOTS",
+                    "hasComments": true
+                },
+                {
+                    "item": "SOMBRAS",
+                    "hasComments": true
+                },
+                {
+                    "item": "CORROSION ESTRUTURA",
+                    "hasComments": true
+                },
+                {
+                    "item": "ALINEACION",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTADO DE CONECTORES",
+                    "hasComments": true
+                },
+                {
+                    "item": "ORDEN DE CABLEADO",
+                    "hasComments": true
+                }
+            ]
+        },
+        {
+            "seccion": "TRACKER",
+            "items": [
+                {
+                    "item": "ESTADO ACTUADORES",
+                    "hasComments": true
+                },
+                {
+                    "item": "COMUNICACIÓN",
+                    "hasComments": true
+                }
+            ]
+        },
+        {
+            "seccion": "INVERSORES",
+            "items": [
+                {
+                    "item": "ESTADO DE CABLEADO",
+                    "hasComments": true
+                },
+                {
+                    "item": "BASE DE INVERSOR",
+                    "hasComments": true
+                },
+                {
+                    "item": "LIMPIEZA Y CONDICIONES",
+                    "hasComments": true
+                },
+                {
+                    "item": "ALARMAS ACTIVA",
+                    "hasComments": true
+                },
+                {
+                    "item": "EQUIPOS OPERATIVOS",
+                    "hasComments": true
+                },
+                {
+                    "item": "COMUNICACIÓN CON SISTEMA DE MONITOREO",
+                    "hasComments": true
+                },
+                {
+                    "item": "MARQUILLA EN CABLEADO",
+                    "hasComments": true
+                }
+            ]
+        },
+        {
+            "seccion": "ESTACION METEOROLOGICA",
+            "items": [
+                {
+                    "item": "ACCESO",
+                    "hasComments": true
+                },
+                {
+                    "item": "SOMBRAS",
+                    "hasComments": true
+                },
+                {
+                    "item": "LIMPIEZA Y CONDICIONES",
+                    "hasComments": true
+                },
+                {
+                    "item": "COMUNICACIÓN",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTADO PIRANOMETRO",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTADO TEMPERATURA MOD",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTADO TEMPERATURA AMB",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTADO CABLEADO",
+                    "hasComments": true
+                }
+            ]
+        },
+        {
+            "seccion": "PROTECCIONES",
+            "items": [
+                {
+                    "item": "ESTADO DE DPS",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTADO BATERIA",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTADO BREAKERS",
+                    "hasComments": true
+                },
+                {
+                    "item": "CONTINUIDAD Y CONEXIONES",
+                    "hasComments": true
+                },
+                {
+                    "item": "COMUNICACIÓN",
+                    "hasComments": true
+                },
+                {
+                    "item": "DATALOGGER OPERATIVO",
+                    "hasComments": true
+                },
+                {
+                    "item": "CONECTIVIDAD ACTIVA",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTADO ROUTER",
+                    "hasComments": true
+                },
+                {
+                    "item": "CALIDAD DE SEÑAL",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTACION METEOROLOGICA COMUNICANDO",
+                    "hasComments": true
+                },
+                {
+                    "item": "MEDIDOR",
+                    "hasComments": true
+                }
+            ]
+        },
+        {
+            "seccion": "CCTV",
+            "items": [
+                {
+                    "item": "INSTALACION DE CAMARAS",
+                    "hasComments": true
+                },
+                {
+                    "item": "COMUNICACIÓN DE CAMARAS",
+                    "hasComments": true
+                }
+            ]
+        },
+        {
+            "seccion": "HSE",
+            "items": [
+                {
+                    "item": "EXTINTONRES VIGENTES",
+                    "hasComments": true
+                },
+                {
+                    "item": "EXTINTONRES BUEN ACCESO",
+                    "hasComments": true
+                },
+                {
+                    "item": "RIESGOS ELECTRICOS",
+                    "hasComments": true
+                }
+            ]
+        },
+        {
+            "seccion": "DRENAJES",
+            "items": [
+                {
+                    "item": "CARCAVAS DE SOCAVACION",
+                    "hasComments": true
+                },
+                {
+                    "item": "CEMENTACION",
+                    "hasComments": true
+                },
+                {
+                    "item": "ACUMULACION DE AGUA O ENCHARCAMIENTO",
+                    "hasComments": true
+                }
+            ]
+        },
+        {
+            "seccion": "AUXILIARES",
+            "items": [
+                {
+                    "item": "UPS",
+                    "hasComments": true
+                },
+                {
+                    "item": "TIEMPO DE AUTONOMIA",
+                    "hasComments": true
+                },
+                {
+                    "item": "SISTEMA AUXILIAR ENERIZADO",
+                    "hasComments": true
+                },
+                {
+                    "item": "MONITOREO CON ALIMENTACION",
+                    "hasComments": true
+                }
+            ]
+        },
+        {
+            "seccion": "MEDIA TENSION",
+            "items": [
+                {
+                    "item": "CENTRO TRANFORMACION",
+                    "hasComments": true
+                },
+                {
+                    "item": "CONDICIONES GENERALES",
+                    "hasComments": true
+                },
+                {
+                    "item": "VENTILACION ADECUADA",
+                    "hasComments": true
+                },
+                {
+                    "item": "LIMPIEZA Y CONDICIONES",
+                    "hasComments": true
+                },
+                {
+                    "item": "TRANSFORMADOR",
+                    "hasComments": true
+                },
+                {
+                    "item": "PRESENCIA DE FUGAS",
+                    "hasComments": true
+                },
+                {
+                    "item": "NIVEL ACEITE",
+                    "hasComments": true
+                },
+                {
+                    "item": "TEMPERATURA ADECUADA",
+                    "hasComments": true
+                },
+                {
+                    "item": "PROTECCIONES MT",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTADO RELES",
+                    "hasComments": true
+                },
+                {
+                    "item": "PARAMETROS CORRECTOS",
+                    "hasComments": true
+                },
+                {
+                    "item": "EVENTOS Ó FALLAS",
+                    "hasComments": true
+                },
+                {
+                    "item": "FUNCIONAMIENTO",
+                    "hasComments": true
+                },
+                {
+                    "item": "CELDAS MT",
+                    "hasComments": true
+                },
+                {
+                    "item": "CONDICIONES ADECUADAS",
+                    "hasComments": true
+                },
+                {
+                    "item": "ETIQUETADO",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTADO DEL CABLEADO",
+                    "hasComments": true
+                },
+                {
+                    "item": "CTS/PTS",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTADO GENERAL",
+                    "hasComments": true
+                },
+                {
+                    "item": "IDENTIFICACION DE LUGAR",
+                    "hasComments": true
+                },
+                {
+                    "item": "PUESTAS A TIERRA",
+                    "hasComments": true
+                },
+                {
+                    "item": "ESTADO GENERAL",
+                    "hasComments": true
+                }
+            ]
+        }
+    ]
+}

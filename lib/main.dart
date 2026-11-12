@@ -11,7 +11,7 @@ import 'core/config/di/injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
+
   await HiveInitializer.init(sl);
   await configureDependencies();
 
@@ -45,7 +45,6 @@ class MyAppView extends StatelessWidget {
     final router = createRouter();
 
     return MaterialApp.router(
-      title: 'Clean Architecture App',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       routerConfig: router,

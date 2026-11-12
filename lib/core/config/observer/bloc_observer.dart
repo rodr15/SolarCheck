@@ -11,7 +11,6 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onCreate(BlocBase bloc) {
     super.onCreate(bloc);
-    print('Here is created');
     _logger.t('🟢 Creado: ${bloc.runtimeType}');
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:solar_check/features/projects/domain/entities/validation_status.dart';
 
 class TitleWithSubtitle extends StatelessWidget {
   final String title;
@@ -141,26 +142,13 @@ class LandingEmptyProjects extends StatelessWidget {
                 stepNumber: '2',
                 title: 'Evaluacion visual',
                 subtitle: 'Valida rapidamente',
-                extraContent: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ValidateStatusChip(
-                      icon: Icons.done,
-                      text: 'Aprobado',
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    ValidateStatusChip(
-                      icon: Icons.close,
-                      text: 'No Aprobado',
-                      color: Colors.red,
-                    ),
-                    ValidateStatusChip(
-                      icon: Icons.warning,
-                      text: 'Pendiente',
-                      color: Colors.orange,
-                    ),
-                  ],
-                ),
+                bottomExtracontent: Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 8,
+                    runSpacing: 2,
+                    children: ValidationStatus.values
+                        .map((s) => ValidateStatusChip(status: s))
+                        .toList()),
               ),
               StepCard(
                 stepNumber: '3',
@@ -176,56 +164,45 @@ class LandingEmptyProjects extends StatelessWidget {
 }
 
 class ValidateStatusChip extends StatelessWidget {
-  final IconData? icon;
-  final String text;
-  final Color color;
-
+  final ValidationStatus status;
+  final String? optionalText;
   const ValidateStatusChip({
     super.key,
-    this.icon,
-    required this.text,
-    required this.color,
+    required this.status,
+    this.optionalText,
   });
 
   @override
   Widget build(BuildContext context) {
+    final color = status.getColor(context);
+
     return Chip(
-      labelPadding: EdgeInsets.all(2),
-      label: Row(
-        children: [
-          if (icon != null) ...[
-            Icon(
-              icon,
-              size: 15,
-              color: Theme.of(context).colorScheme.onPrimary,
-            )
-          ],
-          Text(
-            text,
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium!
-                .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-          ),
-        ],
-      ),
-      backgroundColor: color,
+      avatar: Icon(status.icon, color: color, size: 18),
+      label: Text(optionalText ?? status.text,
+          style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                color: color,
+                fontWeight: FontWeight.bold,
+              )),
+      backgroundColor: color.withOpacity(0.1),
+      side: BorderSide.none,
     );
   }
 }
 
 class StepCard extends StatelessWidget {
-  final String stepNumber;
+  final String? stepNumber;
   final String title;
-  final String subtitle;
-  final Widget? extraContent;
+  final String? subtitle;
+  final Widget? bottomExtracontent;
+  final Widget? sideExtraContent;
 
   const StepCard({
     super.key,
-    required this.stepNumber,
+    this.stepNumber,
     required this.title,
-    required this.subtitle,
-    this.extraContent,
+    this.subtitle,
+    this.bottomExtracontent,
+    this.sideExtraContent,
   });
 
   @override
@@ -236,42 +213,47 @@ class StepCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Theme.of(context).highlightColor,
-                shape: BoxShape.rectangle,
+            if (stepNumber != null && stepNumber!.isNotEmpty)
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Theme.of(context).highlightColor,
+                  shape: BoxShape.rectangle,
+                ),
+                child: Text(
+                  stepNumber!,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(color: Theme.of(context).primaryColor),
+                ),
               ),
-              child: Text(
-                stepNumber,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(color: Theme.of(context).primaryColor),
+            Flexible(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    if (subtitle != null && subtitle!.isNotEmpty)
+                      Text(
+                        subtitle!,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    if (bottomExtracontent != null) ...[bottomExtracontent!]
+                  ],
+                ),
               ),
             ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    subtitle,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  if (extraContent != null) ...[extraContent!]
-                ],
-              ),
-            )
+            if (sideExtraContent != null) sideExtraContent!
           ],
         ),
       ),
