@@ -5,8 +5,8 @@ import 'package:solar_check/core/presentation/widgets/global_widgets.dart';
 import 'package:solar_check/features/projects/domain/entities/section.entity.dart';
 import 'package:solar_check/features/projects/presentation/bloc/inspection/inspection_bloc.dart';
 
-class CatalogScreen extends StatelessWidget {
-  const CatalogScreen({super.key, required this.projectId});
+class InspectionResumeScreen extends StatelessWidget {
+  const InspectionResumeScreen({super.key, required this.projectId});
 
   final String projectId;
 
@@ -22,7 +22,7 @@ class CatalogScreen extends StatelessWidget {
           child: BlocProvider(
             create: (context) =>
                 sl<InspectionBloc>()..add(InspectionEvent.started(projectId)),
-            child: CatalogContent(),
+            child: InspectionResumeContent(),
           ),
         ),
       ),
@@ -30,8 +30,8 @@ class CatalogScreen extends StatelessWidget {
   }
 }
 
-class CatalogContent extends StatelessWidget {
-  const CatalogContent({
+class InspectionResumeContent extends StatelessWidget {
+  const InspectionResumeContent({
     super.key,
   });
 
