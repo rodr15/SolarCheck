@@ -136,7 +136,8 @@ class LandingProjects extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () => context.goNamed('Catalog',
+                              pathParameters: {'projectId': p.projectId}),
                           child: const SizedBox(
                             width: double.infinity,
                             child: Center(

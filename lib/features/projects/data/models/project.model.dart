@@ -17,6 +17,7 @@ abstract class ProjectModel with _$ProjectModel {
       _$ProjectModelFromJson(json);
 
   Project toEntity() => Project(
+        projectId: projectId,
         name: name,
         type: type,
       );

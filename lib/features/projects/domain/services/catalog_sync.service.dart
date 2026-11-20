@@ -25,22 +25,40 @@ class CatalogSyncService {
     Section catalogSection,
     Map<String, Section> answersByTitle,
   ) {
-    return Option.fromNullable(answersByTitle[catalogSection.title]).match(
+    if (catalogSection.items.isEmpty) return catalogSection;
+
+    final answerSection = answersByTitle[catalogSection.title];
+    if (answerSection == null) return catalogSection;
+
+    if (catalogSection.items.first is Section) {
+      return answerSection.copyWith(
+        items: synchronize(
+          catalog: catalogSection.items.cast<Section>(),
+          answers: answerSection.items.cast<Section>(),
+        ),
+      );
+    }
+
+    return Option.fromNullable(answerSection).match(
       () => catalogSection,
       (answerSection) => answerSection.copyWith(
-        items: _syncItems(catalogSection.items, answerSection.items),
+        items: _syncItems(
+          catalogSection.items.cast<SectionItem>(),
+          answerSection.items.cast<SectionItem>(),
+        ),
       ),
     );
   }
 
   List<SectionItem> _syncItems(
-    List<SectionItem> catalogItems,
-    List<SectionItem> answerItems,
+    List<SectionItem>? catalogItems,
+    List<SectionItem>? answerItems,
   ) {
-    if (answerItems.isEmpty) return catalogItems;
+    if (catalogItems == null || catalogItems.isEmpty) return [];
+    if (answerItems == null || answerItems.isEmpty) return catalogItems;
 
     final Map<String, SectionItem> answersByTitle = {
-      for (final item in answerItems) item.title ?? item.subSectionTitle!: item,
+      for (final item in answerItems) item.title: item,
     };
 
     return catalogItems
@@ -52,11 +70,7 @@ class CatalogSyncService {
     SectionItem catalogItem,
     Map<String, SectionItem> answersByTitle,
   ) {
-    return Option.fromNullable(answersByTitle[catalogItem.title]).match(
-      () => catalogItem,
-      (answerItem) => answerItem.copyWith(
-        subItems: _syncItems(catalogItem.subItems, answerItem.subItems),
-      ),
-    );
+    return Option.fromNullable(answersByTitle[catalogItem.title])
+        .match(() => catalogItem, (answerItem) => answerItem);
   }
 }

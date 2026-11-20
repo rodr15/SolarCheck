@@ -12,17 +12,21 @@ abstract class InspectionModel with _$InspectionModel {
     @JsonKey(name: "inspectionId") required String inspectionId,
     @JsonKey(name: "projectId") required String projectId,
     @JsonKey(name: "updatedAt") required DateTime updatedAt,
-    @JsonKey(name: "answer") required List<SectionModel> answer,
+    @JsonKey(name: "answer") required List<SectionEntryModel> answer,
   }) = _InspectionModel;
 
   factory InspectionModel.fromJson(Map<String, dynamic> json) =>
       _$InspectionModelFromJson(json);
 
   Inspection toEntity() => Inspection(
-      projectId: projectId,
-      inspectionId: inspectionId,
-      updatedAt: updatedAt,
-      inspectionAnswers: answer.map((a) => a.toEntity()).toList());
+        projectId: projectId,
+        inspectionId: inspectionId,
+        updatedAt: updatedAt,
+        inspectionAnswers: answer
+            .whereType<SectionModel>()
+            .map((section) => section.toEntity())
+            .toList(),
+      );
 
   factory InspectionModel.fromEntity(Inspection entity) => InspectionModel(
         inspectionId: entity.inspectionId,
