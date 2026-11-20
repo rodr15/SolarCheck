@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 import 'package:solar_check/features/projects/domain/entities/inspection.entity.dart';
 import 'package:solar_check/features/projects/domain/repositories/catalog.repository.dart';
 import 'package:solar_check/features/projects/domain/repositories/inspection.repository.dart';
-import 'package:solar_check/features/projects/domain/services/catalog_sync.service.dart';
 
 @injectable
 class CreateInspectionUseCase {

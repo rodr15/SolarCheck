@@ -22,9 +22,7 @@ class InspectionScreen extends StatelessWidget {
 }
 
 class _InspectionScreenContent extends StatelessWidget {
-  const _InspectionScreenContent({
-    super.key,
-  });
+  const _InspectionScreenContent();
 
   @override
   Widget build(BuildContext context) {

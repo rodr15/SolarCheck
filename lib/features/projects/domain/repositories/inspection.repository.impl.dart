@@ -1,4 +1,4 @@
-import 'package:fpdart/src/either.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:solar_check/features/projects/data/datasource/inspection.datasource.dart';
 import 'package:solar_check/features/projects/data/models/inspection.model.dart';

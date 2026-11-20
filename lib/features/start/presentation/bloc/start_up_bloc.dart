@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -11,7 +11,7 @@ part 'start_up_bloc.freezed.dart';
 
 @singleton
 class StartUpBloc extends Bloc<StartUpEvent, StartUpState> {
-  GetUserUseCase _getUserUseCase;
+  final GetUserUseCase _getUserUseCase;
   StartUpBloc(this._getUserUseCase) : super(_Initial()) {
     on<_Started>(_onStarted);
     on<_Loaded>(_onLoaded);

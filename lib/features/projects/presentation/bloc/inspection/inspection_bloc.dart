@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
@@ -12,13 +12,11 @@ part 'inspection_bloc.freezed.dart';
 
 @injectable
 class InspectionBloc extends Bloc<InspectionEvent, InspectionState> {
-  final GetInspectionUsecase _getInspectionUsecase;
   final GetInspectionByProjectUsecase _getInspectionByProjectUseCase;
   InspectionBloc(
       {required GetInspectionUsecase getInspectionUsecase,
       required GetInspectionByProjectUsecase getInspectionByProjectUseCase})
       : _getInspectionByProjectUseCase = getInspectionByProjectUseCase,
-        _getInspectionUsecase = getInspectionUsecase,
         super(_Initial()) {
     on<_Started>(load);
   }

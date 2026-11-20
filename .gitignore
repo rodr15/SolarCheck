@@ -126,3 +126,5 @@ app.*.symbols
 *.mocks.dart
 .DS_Store
 *.g.yaml
+# Duplicated / iCloud
+* [0-9]*.dart
