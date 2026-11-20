@@ -125,3 +125,4 @@ app.*.symbols
 *.config.dart
 *.mocks.dart
 .DS_Store
+*.g.yaml
