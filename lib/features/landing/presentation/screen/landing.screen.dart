@@ -107,11 +107,11 @@ class LandingProjects extends StatelessWidget {
             const SizedBox(height: 8),
             ...projects.map((p) => Card(
                   margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 6), // Controlamos el margen de la tarjeta
+                    horizontal: 16,
+                    vertical: 6,
+                  ),
                   child: Padding(
-                    padding:
-                        const EdgeInsets.all(12), // Padding interno equilibrado
+                    padding: const EdgeInsets.all(12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -123,20 +123,18 @@ class LandingProjects extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                        // USAMOS WRAP EN LUGAR DE ROW: Evita desbordamientos si hay muchos chips
                         Wrap(
                           spacing: 8.0,
                           runSpacing: 4.0,
                           children: ValidationStatus.values
                               .map((s) => ValidateStatusChip(
                                     status: s,
-                                    optionalText: '${s.text}: 0',
                                   ))
                               .toList(),
                         ),
                         const SizedBox(height: 12),
                         ElevatedButton(
-                          onPressed: () => context.goNamed('Catalog',
+                          onPressed: () => context.pushNamed('Catalog',
                               pathParameters: {'projectId': p.projectId}),
                           child: const SizedBox(
                             width: double.infinity,
@@ -152,18 +150,18 @@ class LandingProjects extends StatelessWidget {
             const SizedBox(height: 12),
             Center(
               child: ElevatedButton(
-                onPressed: () => context.goNamed('CreateProject'),
+                onPressed: () => context.pushNamed('CreateProject'),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.add_outlined),
                     SizedBox(width: 8),
-                    Text('Crea nuevo proyecto'), // Corregido el typo "newo"
+                    Text('Crea nuevo proyecto'),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 16), // Espacio inferior de respiro
+            const SizedBox(height: 16),
           ],
         ),
       ),

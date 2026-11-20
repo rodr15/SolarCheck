@@ -40,6 +40,9 @@ class AppTheme {
           vertical: 12,
         ),
       ),
+      cardTheme: CardThemeData(
+        color: Colors.white,
+      ),
     );
   }
 }

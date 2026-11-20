@@ -90,7 +90,7 @@ abstract class SectionItemModel extends SectionEntryModel
         title: item,
         couldHaveComments: couldHaveComments ?? false,
         status: ValidationStatusExtension.fromText(status ?? '') ??
-            ValidationStatus.pending,
+            ValidationStatus.withoutValidation,
       );
 
   factory SectionItemModel.fromEntity(SectionItem entity) => SectionItemModel(

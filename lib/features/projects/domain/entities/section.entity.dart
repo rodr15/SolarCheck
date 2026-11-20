@@ -24,6 +24,6 @@ abstract class SectionItem extends SectionEntry with _$SectionItem {
     required String title,
     @Default(false) bool couldHaveComments,
     String? comments,
-    @Default(ValidationStatus.pending) ValidationStatus status,
+    @Default(ValidationStatus.withoutValidation) ValidationStatus status,
   }) = _SectionItem;
 }

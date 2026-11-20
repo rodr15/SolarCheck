@@ -166,19 +166,26 @@ class LandingEmptyProjects extends StatelessWidget {
 class ValidateStatusChip extends StatelessWidget {
   final ValidationStatus status;
   final String? optionalText;
+  final bool shortText;
   const ValidateStatusChip({
     super.key,
     required this.status,
     this.optionalText,
+    this.shortText = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final color = status.getColor(context);
+    final color = status.getColor(context) == Colors.transparent
+        ? status.getColor(context).withValues(alpha: 0.5)
+        : status.getColor(context);
+
+    final statusText = shortText ? status.shortText : status.text;
+    final text = optionalText ?? statusText;
 
     return Chip(
       avatar: Icon(status.icon, color: color, size: 18),
-      label: Text(optionalText ?? status.text,
+      label: Text(text,
           style: Theme.of(context).textTheme.labelSmall!.copyWith(
                 color: color,
                 fontWeight: FontWeight.bold,
@@ -195,7 +202,7 @@ class StepCard extends StatelessWidget {
   final String? subtitle;
   final Widget? bottomExtracontent;
   final Widget? sideExtraContent;
-
+  final void Function()? onTap;
   const StepCard({
     super.key,
     this.stepNumber,
@@ -203,58 +210,63 @@ class StepCard extends StatelessWidget {
     this.subtitle,
     this.bottomExtracontent,
     this.sideExtraContent,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (stepNumber != null && stepNumber!.isNotEmpty)
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 6),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Theme.of(context).highlightColor,
-                  shape: BoxShape.rectangle,
+    return InkWell(
+      onTap: onTap,
+      child: Card(
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (stepNumber != null && stepNumber!.isNotEmpty)
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 3, horizontal: 6),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Theme.of(context).highlightColor,
+                    shape: BoxShape.rectangle,
+                  ),
+                  child: Text(
+                    stepNumber!,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(color: Theme.of(context).primaryColor),
+                  ),
                 ),
-                child: Text(
-                  stepNumber!,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(color: Theme.of(context).primaryColor),
-                ),
-              ),
-            Flexible(
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    if (subtitle != null && subtitle!.isNotEmpty)
+              Flexible(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        subtitle!,
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        title,
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                       ),
-                    if (bottomExtracontent != null) ...[bottomExtracontent!]
-                  ],
+                      if (subtitle != null && subtitle!.isNotEmpty)
+                        Text(
+                          subtitle!,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      if (bottomExtracontent != null) ...[bottomExtracontent!]
+                    ],
+                  ),
                 ),
               ),
-            ),
-            if (sideExtraContent != null) sideExtraContent!
-          ],
+              if (sideExtraContent != null) sideExtraContent!
+            ],
+          ),
         ),
       ),
     );

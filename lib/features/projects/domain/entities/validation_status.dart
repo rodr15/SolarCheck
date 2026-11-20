@@ -4,6 +4,7 @@ enum ValidationStatus {
   approved,
   notApproved,
   pending,
+  withoutValidation,
 }
 
 extension ValidationStatusExtension on ValidationStatus {
@@ -21,9 +22,24 @@ extension ValidationStatusExtension on ValidationStatus {
       case ValidationStatus.approved:
         return 'Aprobado';
       case ValidationStatus.notApproved:
-        return 'No Aprobado';
+        return 'Fallo';
       case ValidationStatus.pending:
         return 'Pendiente';
+      case ValidationStatus.withoutValidation:
+        return 'Sin Calificar';
+    }
+  }
+
+  String get shortText {
+    switch (this) {
+      case ValidationStatus.approved:
+        return 'Apr.';
+      case ValidationStatus.notApproved:
+        return 'Fal.';
+      case ValidationStatus.pending:
+        return 'Pen.';
+      case ValidationStatus.withoutValidation:
+        return 'Sin Cal.';
     }
   }
 
@@ -35,6 +51,8 @@ extension ValidationStatusExtension on ValidationStatus {
         return Icons.close;
       case ValidationStatus.pending:
         return Icons.warning;
+      case ValidationStatus.withoutValidation:
+        return Icons.circle_outlined;
     }
   }
 
@@ -46,6 +64,8 @@ extension ValidationStatusExtension on ValidationStatus {
         return Colors.red;
       case ValidationStatus.pending:
         return Colors.orange;
+      case ValidationStatus.withoutValidation:
+        return Colors.transparent;
     }
   }
 }
