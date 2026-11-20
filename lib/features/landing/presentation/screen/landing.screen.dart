@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:solar_check/core/config/di/injection.dart';
+import 'package:solar_check/core/config/router/router.constants.dart';
 import 'package:solar_check/core/presentation/widgets/global_widgets.dart';
 import 'package:solar_check/core/user/presentation/bloc/auth_bloc.dart';
 import 'package:solar_check/features/projects/domain/entities/project.entity.dart';
@@ -102,7 +103,7 @@ class LandingProjects extends StatelessWidget {
           children: [
             const TitleWithSubtitle(
               title: 'Tus proyectos',
-              subTitle: 'Ver todos',
+              subTitle: '',
             ),
             const SizedBox(height: 8),
             ...projects.map((p) => Card(
@@ -134,7 +135,8 @@ class LandingProjects extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         ElevatedButton(
-                          onPressed: () => context.pushNamed('Catalog',
+                          onPressed: () => context.goNamed(
+                              RouterConstants.inspectionResume,
                               pathParameters: {'projectId': p.projectId}),
                           child: const SizedBox(
                             width: double.infinity,
@@ -150,7 +152,8 @@ class LandingProjects extends StatelessWidget {
             const SizedBox(height: 12),
             Center(
               child: ElevatedButton(
-                onPressed: () => context.pushNamed('CreateProject'),
+                onPressed: () =>
+                    context.pushNamed(RouterConstants.createProject),
                 child: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

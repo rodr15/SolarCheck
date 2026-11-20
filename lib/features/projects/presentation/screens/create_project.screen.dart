@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
 import 'package:solar_check/core/config/di/injection.dart';
+import 'package:solar_check/core/config/router/router.constants.dart';
 import 'package:solar_check/core/presentation/widgets/title_with_subtitle.dart';
 import 'package:solar_check/features/projects/presentation/bloc/register/register_project_bloc.dart';
 import 'package:solar_check/features/projects/presentation/widgets/option_card.dart';
@@ -32,8 +33,10 @@ class CreateProjectContent extends StatelessWidget {
       body: BlocConsumer<RegisterProjectBloc, RegisterProjectState>(
         listener: (context, state) {
           if (state.status.isSuccess) {
-            context.goNamed('Catalog',
-                pathParameters: {'projectId': state.projectId});
+            context.goNamed(
+              RouterConstants.inspectionResume,
+              pathParameters: {'projectId': state.projectId},
+            );
           }
         },
         builder: (context, state) {
@@ -142,15 +145,20 @@ class CreateProjectContent extends StatelessWidget {
                             RegisterProjectEvent.formSubmitted(),
                           )
                       : null,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 10,
-                    children: [
-                      Icon(Icons.play_circle_fill_outlined),
-                      Text('Iniciar inspección'),
-                    ],
-                  ),
+                  child: state.status.isInProgress
+                      ? SizedBox(
+                          width: double.infinity,
+                          child: CircularProgressIndicator.adaptive(),
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 10,
+                          children: [
+                            Icon(Icons.play_circle_fill_outlined),
+                            Text('Iniciar inspección'),
+                          ],
+                        ),
                 ),
               ],
             ),

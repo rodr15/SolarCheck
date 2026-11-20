@@ -19,6 +19,7 @@ GoRouter createRouter() {
 
   return GoRouter(
     // initialLocation: '/catalog',
+    debugLogDiagnostics: true,
     initialLocation: RouterConstants.landing,
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
     redirect: (context, state) {
@@ -27,19 +28,19 @@ GoRouter createRouter() {
 
       final redirectPath = appState.when(
         loading: () {
-          return currentPath != RouterConstants.loading
-              ? RouterConstants.loading
+          return currentPath != RouterConstants.getPath(RouterConstants.loading)
+              ? RouterConstants.getPath(RouterConstants.loading)
               : null;
         },
         unauthenticated: () {
-          return currentPath != RouterConstants.login
-              ? RouterConstants.login
+          return currentPath != RouterConstants.getPath(RouterConstants.login)
+              ? RouterConstants.getPath(RouterConstants.login)
               : null;
         },
         authenticated: (_, __) {
-          if (currentPath == RouterConstants.login ||
-              currentPath == RouterConstants.loading) {
-            return RouterConstants.landing;
+          if (currentPath == RouterConstants.getPath(RouterConstants.login) ||
+              currentPath == RouterConstants.getPath(RouterConstants.loading)) {
+            return RouterConstants.getPath(RouterConstants.landing);
           }
           return null;
         },
@@ -78,26 +79,30 @@ GoRouter createRouter() {
         path: RouterConstants.getPath(RouterConstants.createProject),
         builder: (context, state) => const CreateProject(),
       ),
-      ShellRoute(routes: [
-        GoRoute(
-          name: RouterConstants.inspectionResume,
-          path: RouterConstants.getPathWithPathParameters(
-            RouterConstants.inspectionResume,
-            ['projectId'],
+      ShellRoute(
+        routes: [
+          GoRoute(
+            name: RouterConstants.inspectionResume,
+            path: RouterConstants.getPathWithPathParameters(
+              RouterConstants.inspectionResume,
+              ['projectId'],
+            ),
+            // path: '/inspectionResume/:projectId',
+            builder: (context, state) {
+              final projectId = state.pathParameters['projectId'] ?? '';
+              return InspectionResumeScreen(projectId: projectId);
+            },
           ),
-          builder: (context, state) {
-            final projectId = state.pathParameters['projectId']!;
-            return InspectionResumeScreen(projectId: projectId);
-          },
-        ),
-        GoRoute(
-          name: RouterConstants.inspectionCalification,
-          path: RouterConstants.getPath(RouterConstants.inspectionCalification),
-          builder: (context, state) {
-            return CalificationScreen();
-          },
-        ),
-      ]),
+          GoRoute(
+            name: RouterConstants.inspectionCalification,
+            path:
+                RouterConstants.getPath(RouterConstants.inspectionCalification),
+            builder: (context, state) {
+              return CalificationScreen();
+            },
+          ),
+        ],
+      ),
     ],
   );
 }

@@ -32,11 +32,14 @@ class RegisterProjectBloc
     emit(state.copyWith(type: type));
   }
 
-  void _onFormSubmitted(
+  Future<void> _onFormSubmitted(
     RegisterProjectEvent event,
     Emitter<RegisterProjectState> emit,
-  ) {
+  ) async {
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+
+    await Future.delayed(const Duration(seconds: 2));
+
     final isValid = Formz.validate([state.name, state.type]);
     if (!isValid) {
       emit(state.copyWith(status: FormzSubmissionStatus.failure));

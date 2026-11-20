@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:solar_check/core/config/router/router.constants.dart';
 import 'package:solar_check/features/projects/domain/entities/validation_status.dart';
 
 class TitleWithSubtitle extends StatelessWidget {
@@ -108,7 +109,8 @@ class LandingEmptyProjects extends StatelessWidget {
                   ],
                 ),
                 ElevatedButton(
-                    onPressed: () => context.goNamed('CreateProject'),
+                    onPressed: () =>
+                        context.goNamed(RouterConstants.createProject),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -222,7 +224,9 @@ class StepCard extends StatelessWidget {
           margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: sideExtraContent != null
+                ? MainAxisAlignment.spaceBetween
+                : MainAxisAlignment.start,
             children: [
               if (stepNumber != null && stepNumber!.isNotEmpty)
                 Container(
