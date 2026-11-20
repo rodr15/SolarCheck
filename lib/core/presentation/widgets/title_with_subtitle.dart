@@ -183,7 +183,7 @@ class ValidateStatusChip extends StatelessWidget {
                 color: color,
                 fontWeight: FontWeight.bold,
               )),
-      backgroundColor: color.withOpacity(0.1),
+      backgroundColor: color.withValues(alpha: 0.1),
       side: BorderSide.none,
     );
   }

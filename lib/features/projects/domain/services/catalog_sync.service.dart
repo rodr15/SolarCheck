@@ -40,7 +40,7 @@ class CatalogSyncService {
     if (answerItems.isEmpty) return catalogItems;
 
     final Map<String, SectionItem> answersByTitle = {
-      for (final item in answerItems) item.title: item,
+      for (final item in answerItems) item.title ?? item.subSectionTitle!: item,
     };
 
     return catalogItems

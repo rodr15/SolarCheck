@@ -45,7 +45,7 @@ abstract class SectionItemModel with _$SectionItemModel {
       _$SectionItemModelFromJson(json);
 
   SectionItem toEntity() => SectionItem(
-        title: item!,
+        title: item,
         couldHaveComments: couldHaveComments ?? false,
         status: ValidationStatusExtension.fromText(status ?? '') ??
             ValidationStatus.pending,

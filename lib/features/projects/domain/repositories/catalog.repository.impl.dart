@@ -15,8 +15,7 @@ class CatalogRepositoryImpl implements CatalogRepository {
 
       final jsonList = json.decode(jsonString) as List<dynamic>;
       final sections = jsonList
-          .map((item) =>
-              SectionModel.fromJson(item as Map<String, dynamic>).toEntity())
+          .map((item) => SectionModel.fromJson(item).toEntity())
           .toList();
 
       return Either.right(sections);

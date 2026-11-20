@@ -15,7 +15,7 @@ abstract class Section with _$Section {
 abstract class SectionItem with _$SectionItem {
   const SectionItem._();
   const factory SectionItem({
-    @Default('') String title,
+    @Default('') String? title,
     @Default(false) bool couldHaveComments,
     String? subSectionTitle,
     @Default([]) List<SectionItem> subItems,
