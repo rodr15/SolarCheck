@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 import 'package:solar_check/features/projects/data/datasource/inspection.datasource.dart';
 import 'package:solar_check/features/projects/data/models/inspection.model.dart';
 import 'package:solar_check/features/projects/domain/entities/inspection.entity.dart';
-import 'package:solar_check/features/projects/domain/entities/inspection_catalog.entity.dart';
 import 'package:solar_check/features/projects/domain/repositories/inspection.repository.dart';
 
 @LazySingleton(as: InspectionRepository)
@@ -15,18 +14,29 @@ class InspectionRepositoryImpl implements InspectionRepository {
   }) : _inspectionDatasource = inspectionDatasource;
 
   @override
-  Future<Either<Inspection, String>> getInspection(String projectId) async {
-    return _inspectionDatasource.getInspectionById(projectId);
+  Either<String, Inspection> getInspection(String projectId) {
+    final inspection = _inspectionDatasource.getInspectionById(projectId);
+    if (inspection == null) {
+      return Left('No existe una inspeccion con este id');
+    }
+    return Right(inspection.toEntity());
   }
 
   @override
-  Future<void> createInspection(String projectId) async {
-    final inspection = Inspection(
-        projectId: projectId,
-        updatedAt: DateTime.now(),
-        inspectionAnswers: InspectionCatalog(catalog: {}));
+  Future<Inspection> createInspection(Inspection inspection) async {
+    InspectionModel inspectionModel = InspectionModel.fromEntity(inspection);
+    _inspectionDatasource.saveInspection(inspectionModel);
 
-    _inspectionDatasource
-        .saveInspection(InspectionModel.fromEntity(inspection));
+    return inspectionModel.toEntity();
+  }
+
+  @override
+  Either<String, Inspection> getInspectionByProjectId(String projectId) {
+    final inspectionList =
+        _inspectionDatasource.getInspectionsByProjectId(projectId);
+    if (inspectionList.isEmpty) {
+      return Left('No hay ninguna inspeccion en este proyecto');
+    }
+    return Right(inspectionList.last.toEntity());
   }
 }

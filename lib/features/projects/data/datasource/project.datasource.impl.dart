@@ -1,32 +1,32 @@
-import 'package:fpdart/src/either.dart';
 import 'package:hive_ce/hive_ce.dart';
 import 'package:injectable/injectable.dart';
 import 'package:solar_check/core/config/constants/hive_boxes.dart';
 import 'package:solar_check/features/projects/data/datasource/project.datasource.dart';
 import 'package:solar_check/features/projects/data/models/project.model.dart';
 
-@Injectable(as: ProjectDataSource)
+@LazySingleton(as: ProjectDataSource)
 class ProjectLocalDataSource implements ProjectDataSource {
   final Box<ProjectModel> _projectsBox;
 
-  ProjectLocalDataSource(@Named(HiveBoxes.projects) this._projectsBox);
+  const ProjectLocalDataSource(@Named(HiveBoxes.projects) this._projectsBox);
+
   @override
-  Future<Either<ProjectModel, String>> getProjectById(String id) async {
-    final project = _projectsBox.get(id);
-    if (project == null) {
-      return Either.right('Error getting the inspection ');
-    }
-    return Either.left(project);
+  Future<ProjectModel?> getProjectById(String id) async {
+    return _projectsBox.get(id);
   }
 
   @override
   Future<void> saveProject(ProjectModel project) async {
-    await _projectsBox.add(project);
+    await _projectsBox.put(project.projectId, project);
   }
 
   @override
-  Future<Either<List<ProjectModel>, String>> getAllProjects() async {
-    final projects = _projectsBox.values.toList();
-    return Either.left(projects);
+  Future<List<ProjectModel>> getAllProjects() async {
+    return _projectsBox.values.toList();
+  }
+
+  @override
+  Future<void> deleteProject(String id) async {
+    await _projectsBox.delete(id);
   }
 }

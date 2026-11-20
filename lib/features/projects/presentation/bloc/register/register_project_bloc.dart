@@ -45,7 +45,10 @@ class RegisterProjectBloc
     try {
       final project = Project(name: state.name.value, type: state.type.value);
       _saveProject.call(project);
-      emit(state.copyWith(status: FormzSubmissionStatus.success));
+      emit(state.copyWith(
+        status: FormzSubmissionStatus.success,
+        projectId: project.projectId,
+      ));
     } catch (_) {
       emit(state.copyWith(status: FormzSubmissionStatus.failure));
     }

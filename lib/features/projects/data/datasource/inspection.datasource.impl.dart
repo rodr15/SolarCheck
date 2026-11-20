@@ -1,4 +1,3 @@
-import 'package:fpdart/fpdart.dart';
 import 'package:hive_ce/hive_ce.dart';
 import 'package:injectable/injectable.dart';
 import 'package:solar_check/core/config/constants/hive_boxes.dart';
@@ -14,19 +13,16 @@ class InspectionLocalDataSource implements InspectionDataSource {
   @override
   getInspectionById(String id) async {
     final inspection = _inspectionBox.get(id);
-    if (inspection == null) {
-      return Either.right('Error getting the inspection ');
-    }
-    return Either.left(inspection);
+    return inspection;
   }
 
   @override
   Future<void> saveInspection(InspectionModel inspection) async {
-    await _inspectionBox.add(inspection);
+    await _inspectionBox.put(inspection.inspectionId, inspection);
   }
 
-  Future<List<InspectionModel>> getInspectionsByProjectId(
-      String projectId) async {
+  @override
+  List<InspectionModel> getInspectionsByProjectId(String projectId) {
     final inspections = _inspectionBox.values
         .cast<InspectionModel>()
         .where((model) => model.projectId == projectId)

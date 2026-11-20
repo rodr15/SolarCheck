@@ -6,8 +6,8 @@ import 'package:solar_check/features/projects/presentation/bloc/catalog/catalog_
 import 'package:solar_check/features/projects/presentation/widgets/option_card.dart';
 
 class InspectionScreen extends StatelessWidget {
-  const InspectionScreen({super.key});
-
+  const InspectionScreen({super.key, required this.inspectionId});
+  final String inspectionId;
   @override
   Widget build(BuildContext context) {
     return SafeArea(

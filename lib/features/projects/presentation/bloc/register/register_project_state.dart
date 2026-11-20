@@ -7,6 +7,7 @@ sealed class RegisterProjectState with _$RegisterProjectState, FormzMixin {
     @Default(NameInput.pure()) NameInput name,
     @Default(NameInput.pure('Utility scale')) NameInput type,
     @Default(FormzSubmissionStatus.initial) FormzSubmissionStatus status,
+    @Default('') String projectId,
   }) = _RegisterProjectState;
 
   @override

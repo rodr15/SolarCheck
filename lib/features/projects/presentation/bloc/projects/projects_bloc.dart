@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:solar_check/features/projects/domain/entities/project.entity.dart';
@@ -11,7 +10,7 @@ part 'projects_bloc.freezed.dart';
 
 @injectable
 class ProjectsBloc extends Bloc<ProjectsEvent, ProjectsState> {
-  ProjectRepository _repository;
+  final ProjectRepository _repository;
 
   ProjectsBloc({required ProjectRepository repository})
       : _repository = repository,
@@ -20,9 +19,11 @@ class ProjectsBloc extends Bloc<ProjectsEvent, ProjectsState> {
   }
 
   Future<void> _onLoad(_Load event, Emitter<ProjectsState> emit) async {
-    final projects = await _repository.getAllProject();
+    final projects = await _repository.getAllProjects();
 
     projects.fold(
-        (p) => emit(_Loaded(p)), (e) => _Error('No se pudo cargar la BD'));
+      (e) => _Error('No se pudo cargar la BD'),
+      (p) => emit(_Loaded(p)),
+    );
   }
 }

@@ -9,7 +9,7 @@ class GetInspectionUsecase {
 
   GetInspectionUsecase(this._repository);
 
-  Future<Either<Inspection, String>> call(String id) async {
-    return await _repository.getInspection(id);
+  Future<Either<String, Inspection>> call(String id) async {
+    return _repository.getInspection(id);
   }
 }

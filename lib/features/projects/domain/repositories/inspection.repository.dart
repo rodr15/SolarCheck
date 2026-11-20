@@ -2,6 +2,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:solar_check/features/projects/domain/entities/inspection.entity.dart';
 
 abstract class InspectionRepository {
-  Future<Either<Inspection, String>> getInspection(String inspectionId);
-  Future<void> createInspection(String projectId);
+  Either<String, Inspection> getInspection(String inspectionId);
+  Either<String, Inspection> getInspectionByProjectId(String projectId);
+  Future<Inspection> createInspection(Inspection inspection);
 }

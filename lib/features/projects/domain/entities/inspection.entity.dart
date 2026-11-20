@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:solar_check/features/projects/domain/entities/inspection_catalog.entity.dart';
+import 'package:solar_check/features/projects/domain/entities/section.entity.dart';
 import 'package:uuid/uuid.dart';
 
 part 'inspection.entity.freezed.dart';
@@ -9,7 +9,7 @@ class Inspection with _$Inspection {
   final String inspectionId;
   final String projectId;
   final DateTime updatedAt;
-  final InspectionCatalog inspectionAnswers;
+  final List<Section> inspectionAnswers;
 
   Inspection({
     String? inspectionId,

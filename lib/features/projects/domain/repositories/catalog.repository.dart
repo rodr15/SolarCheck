@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
-
-import '../entities/inspection_catalog.entity.dart';
+import 'package:solar_check/features/projects/domain/entities/section.entity.dart';
 
 abstract class CatalogRepository {
-  Future<Either<InspectionCatalog, String>> getCatalog();
+  Future<Either<String, List<Section>>> getCatalog();
 }

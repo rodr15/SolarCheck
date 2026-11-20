@@ -71,13 +71,19 @@ GoRouter createRouter() {
       ),
       GoRoute(
         name: 'Inspection',
-        path: '/inspection',
-        builder: (context, state) => const InspectionScreen(),
+        path: '/inspection/:id',
+        builder: (context, state) {
+          final inspectionId = state.pathParameters['inspectionId']!;
+          return InspectionScreen(inspectionId: inspectionId);
+        },
       ),
       GoRoute(
         name: 'Catalog',
-        path: '/catalog',
-        builder: (context, state) => const CatalogScreen(),
+        path: '/catalog/:projectId',
+        builder: (context, state) {
+          final projectId = state.pathParameters['projectId']!;
+          return CatalogScreen(projectId: projectId);
+        },
       ),
     ],
   );

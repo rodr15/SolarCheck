@@ -10,7 +10,7 @@ class GetProjectListUseCase {
   GetProjectListUseCase({required ProjectRepository projectRepository})
       : _projectRepository = projectRepository;
 
-  Future<Either<List<Project>, String>> call() {
-    return _projectRepository.getAllProject();
+  Future<Either<String, List<Project>>> call() {
+    return _projectRepository.getAllProjects();
   }
 }

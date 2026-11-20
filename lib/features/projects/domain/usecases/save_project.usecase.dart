@@ -1,3 +1,4 @@
+import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 import 'package:solar_check/features/projects/domain/entities/project.entity.dart';
 import 'package:solar_check/features/projects/domain/repositories/project.repository.dart';
@@ -13,8 +14,12 @@ class SaveProjectUseCase {
       : _projectRepository = projectRepository,
         _createInspection = createInspection;
 
-  Future<void> call(Project project) async {
-    await _projectRepository.saveProject(project);
-    _createInspection.call(project.projectId);
+  Future<Either<String, Project>> call(Project project) async {
+    final savedProject = await _projectRepository.saveProject(project);
+    if (savedProject.isLeft()) return Left('El proyecto no fue guardado');
+
+    await _createInspection
+        .call(savedProject.getRight().toNullable()!.projectId);
+    return savedProject;
   }
 }

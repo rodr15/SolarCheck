@@ -1,32 +1,28 @@
-import 'package:hive_ce/hive_ce.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:solar_check/core/user/domain/entities/user.entity.dart';
 
+part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
-@HiveType(typeId: 1)
-class UserModel extends UserEntity {
-  @HiveField(0)
-  final String name;
+@freezed
+abstract class UserModel with _$UserModel {
+  const UserModel._();
 
-  @HiveField(1)
-  final String email;
+  const factory UserModel({
+    @JsonKey(name: 'name') required String name,
+    @JsonKey(name: 'email') required String email,
+  }) = _UserModel;
 
-  const UserModel({
-    required this.name,
-    required this.email,
-  }) : super(name: name, email: email);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
-  factory UserModel.fromEntity(UserEntity entity) {
-    return UserModel(
-      name: entity.name,
-      email: entity.email,
-    );
-  }
+  factory UserModel.fromEntity(UserEntity entity) => UserModel(
+        name: entity.name,
+        email: entity.email,
+      );
 
-  UserEntity toEntity() {
-    return UserEntity(
-      name: name,
-      email: email,
-    );
-  }
+  UserEntity toEntity() => UserEntity(
+        name: name,
+        email: email,
+      );
 }

@@ -3,10 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:solar_check/core/config/di/injection.dart';
 import 'package:solar_check/core/presentation/widgets/global_widgets.dart';
 import 'package:solar_check/features/projects/domain/entities/validation_status.dart';
-import 'package:solar_check/features/projects/presentation/bloc/catalog/catalog_bloc.dart';
+import 'package:solar_check/features/projects/presentation/bloc/inspection/inspection_bloc.dart';
 
 class CatalogScreen extends StatelessWidget {
-  const CatalogScreen({super.key});
+  const CatalogScreen({super.key, required this.projectId});
+
+  final String projectId;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,8 @@ class CatalogScreen extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(10.0),
           child: BlocProvider(
-            create: (context) => sl<CatalogBloc>()..add(CatalogEvent.load()),
+            create: (context) =>
+                sl<InspectionBloc>()..add(InspectionEvent.started(projectId)),
             child: CatalogContent(),
           ),
         ),
@@ -31,13 +34,13 @@ class CatalogContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CatalogBloc, CatalogState>(
+    return BlocBuilder<InspectionBloc, InspectionState>(
       builder: (context, state) {
         return state.maybeWhen(
-          loaded: (catalog) {
+          loaded: (inspection) {
             // return CollapsibleSectionWidget(
             //     section: SectionItem.fromMap(catalog.catalog));
-            return Text(catalog.catalog.toString());
+            return Text(inspection.inspectionAnswers.toString());
           },
           error: (error) =>
               Text('Error cargando el catalogo, por favor intentelo más tarde'),

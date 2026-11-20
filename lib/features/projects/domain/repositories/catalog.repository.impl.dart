@@ -2,24 +2,26 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
+import 'package:solar_check/features/projects/data/models/section.model.dart';
+import 'package:solar_check/features/projects/domain/entities/section.entity.dart';
 import 'package:solar_check/features/projects/domain/repositories/catalog.repository.dart';
-import '../../domain/entities/inspection_catalog.entity.dart';
 
 @LazySingleton(as: CatalogRepository)
 class CatalogRepositoryImpl implements CatalogRepository {
   @override
-  Future<Either<InspectionCatalog, String>> getCatalog() async {
+  Future<Either<String, List<Section>>> getCatalog() async {
     try {
-      final String jsonString =
-          await rootBundle.loadString('assets/catalog.json');
+      final jsonString = await rootBundle.loadString('assets/catalog.json');
 
-      final Map<String, dynamic> jsonMap = json.decode(jsonString);
+      final jsonList = json.decode(jsonString) as List<dynamic>;
+      final sections = jsonList
+          .map((item) =>
+              SectionModel.fromJson(item as Map<String, dynamic>).toEntity())
+          .toList();
 
-      final catalogModel = InspectionCatalog.fromJson(jsonMap);
-
-      return Either.left(catalogModel);
+      return Either.right(sections);
     } catch (e) {
-      return Either.right('Error al cargar el catálogo de inspección: $e');
+      return Either.left('Error al cargar el catálogo de inspección: $e');
     }
   }
 }

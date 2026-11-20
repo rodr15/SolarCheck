@@ -1,42 +1,29 @@
-import 'package:hive_ce/hive_ce.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:solar_check/features/projects/domain/entities/project.entity.dart';
 
+part 'project.model.freezed.dart';
 part 'project.model.g.dart';
 
-@HiveType(typeId: 3)
-class ProjectModel extends Project {
-  @HiveField(0)
-  final String projectId;
+@freezed
+abstract class ProjectModel with _$ProjectModel {
+  const ProjectModel._();
+  const factory ProjectModel({
+    @JsonKey(name: "projectId") required String projectId,
+    @JsonKey(name: "name") required String name,
+    @JsonKey(name: "type") required String type,
+  }) = _ProjectModel;
 
-  @HiveField(1)
-  final String name;
+  factory ProjectModel.fromJson(Map<String, dynamic> json) =>
+      _$ProjectModelFromJson(json);
 
-  @HiveField(2)
-  final String type;
+  Project toEntity() => Project(
+        name: name,
+        type: type,
+      );
 
-  ProjectModel({
-    required this.projectId,
-    required this.name,
-    required this.type,
-  }) : super(
-          projectId: projectId,
-          name: name,
-          type: type,
-        );
-
-  factory ProjectModel.fromEntity(Project project) {
-    return ProjectModel(
-      projectId: project.projectId,
-      name: project.name,
-      type: project.type,
-    );
-  }
-
-  Project toEntity() {
-    return Project(
-      projectId: projectId,
-      name: name,
-      type: type,
-    );
-  }
+  factory ProjectModel.fromEntity(Project project) => ProjectModel(
+        projectId: project.projectId,
+        name: project.name,
+        type: project.type,
+      );
 }
