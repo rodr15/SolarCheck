@@ -17,21 +17,31 @@ class GetProjectInspectionUseCase {
         _inspectionRepository = inspectionRepository,
         _catalogRepository = catalogRepository;
 
-  Future<Either<Inspection, String>> call(String projectId) async {
+  Future<Either<String, Inspection>> call(String projectId) async {
     final mandatoryTemplate = await _catalogRepository.getCatalog();
 
     if (mandatoryTemplate.isLeft()) {
-      return Either.right('No se pudo obtener el catalogo de preguntas ');
+      return Left('No se pudo obtener el catalogo de preguntas ');
     }
 
-    final userInspectionData = _inspectionRepository.getInspection(projectId);
+    final userInspectionData =
+        await _inspectionRepository.getInspection(projectId);
 
     if (userInspectionData.isLeft()) {
-      return Either.right('No se pudo obtener la inspeccion');
+      return Left('No se pudo obtener la inspeccion');
     }
 
     final mandatoryCatalog = mandatoryTemplate.getRight().toNullable()!;
     final inspectionData = userInspectionData.getRight().toNullable()!;
+
+    final needsSync = _catalogSyncService.needsSync(
+      catalog: mandatoryCatalog,
+      answers: inspectionData.inspectionAnswers,
+    );
+
+    if (!needsSync) {
+      return Right(inspectionData);
+    }
 
     final synchronizedInspection = _catalogSyncService.synchronize(
       catalog: mandatoryCatalog,
@@ -41,6 +51,8 @@ class GetProjectInspectionUseCase {
     final inspectionSync =
         inspectionData.copyWith(inspectionAnswers: synchronizedInspection);
 
-    return Either.left(inspectionSync);
+    _inspectionRepository.saveInspection(inspectionSync);
+
+    return Right(inspectionSync);
   }
 }

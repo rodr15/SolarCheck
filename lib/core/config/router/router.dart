@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import 'package:solar_check/core/config/di/injection.dart';
 import 'package:solar_check/core/config/router/router.constants.dart';
 import 'package:solar_check/core/config/router/router_stream.dart';
+import 'package:solar_check/core/presentation/screen/not_found.screen.dart';
 import 'package:solar_check/core/user/presentation/bloc/auth_bloc.dart';
 import 'package:solar_check/features/landing/presentation/screen/landing.screen.dart';
-import 'package:solar_check/features/projects/presentation/screens/calification_screen.dart';
+import 'package:solar_check/features/projects/domain/entities/section.entity.dart';
+import 'package:solar_check/features/projects/presentation/bloc/inspection/inspection_bloc.dart';
+import 'package:solar_check/features/projects/presentation/screens/inspection_calification.screen.dart';
 import 'package:solar_check/features/projects/presentation/screens/inspection_resume.screen.dart';
 import 'package:solar_check/features/projects/presentation/screens/create_project.screen.dart';
 import 'package:solar_check/features/start/presentation/screen/loading.screen.dart';
@@ -18,9 +23,8 @@ GoRouter createRouter() {
   final authBloc = GetIt.I<AuthBloc>();
 
   return GoRouter(
-    // initialLocation: '/catalog',
     debugLogDiagnostics: true,
-    initialLocation: RouterConstants.landing,
+    initialLocation: RouterConstants.getPath(RouterConstants.landing),
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
     redirect: (context, state) {
       final appState = authBloc.state;
@@ -80,6 +84,14 @@ GoRouter createRouter() {
         builder: (context, state) => const CreateProject(),
       ),
       ShellRoute(
+        builder: (context, state, child) {
+          final projectId = state.pathParameters['projectId'] ?? '';
+          return BlocProvider(
+            create: (context) =>
+                sl<InspectionBloc>()..add(InspectionEvent.started(projectId)),
+            child: child,
+          );
+        },
         routes: [
           GoRoute(
             name: RouterConstants.inspectionResume,
@@ -87,7 +99,6 @@ GoRouter createRouter() {
               RouterConstants.inspectionResume,
               ['projectId'],
             ),
-            // path: '/inspectionResume/:projectId',
             builder: (context, state) {
               final projectId = state.pathParameters['projectId'] ?? '';
               return InspectionResumeScreen(projectId: projectId);
@@ -95,15 +106,23 @@ GoRouter createRouter() {
           ),
           GoRoute(
             name: RouterConstants.inspectionCalification,
-            path:
-                RouterConstants.getPath(RouterConstants.inspectionCalification),
+            path: RouterConstants.getPathWithPathParameters(
+              RouterConstants.inspectionCalification,
+              ['inspectionId'],
+            ),
             builder: (context, state) {
-              return CalificationScreen();
+              final inspectionId = state.pathParameters['inspectionId'] ?? '';
+              final selectedSection = state.extra as SectionItem?;
+              return InspectionCalificationScreen(
+                inspectionId: inspectionId,
+                selectedSection: selectedSection,
+              );
             },
           ),
         ],
       ),
     ],
+    errorBuilder: (context, state) => NotFoundScreen(),
   );
 }
 

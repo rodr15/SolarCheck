@@ -15,6 +15,23 @@ abstract class Section extends SectionEntry with _$Section {
     required String title,
     required List<SectionEntry> items,
   }) = _Section;
+
+  List<SectionItem> getFlattenItems() {
+    List<SectionItem> flattenItems = [];
+
+    for (SectionEntry i in items) {
+      if (i is Section) {
+        flattenItems.addAll(i.getFlattenItems());
+        continue;
+      }
+      if (i is SectionItem) {
+        flattenItems.add(i);
+        continue;
+      }
+    }
+
+    return flattenItems;
+  }
 }
 
 @freezed

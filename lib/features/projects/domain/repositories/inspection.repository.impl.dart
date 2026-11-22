@@ -1,5 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
+import 'package:solar_check/features/projects/data/datasource/cache/inspection.cache.dart';
 import 'package:solar_check/features/projects/data/datasource/inspection.datasource.dart';
 import 'package:solar_check/features/projects/data/models/inspection.model.dart';
 import 'package:solar_check/features/projects/domain/entities/inspection.entity.dart';
@@ -8,25 +9,19 @@ import 'package:solar_check/features/projects/domain/repositories/inspection.rep
 @LazySingleton(as: InspectionRepository)
 class InspectionRepositoryImpl implements InspectionRepository {
   final InspectionDataSource _inspectionDatasource;
+  final InspectionCache _cache;
 
   InspectionRepositoryImpl({
     required InspectionDataSource inspectionDatasource,
-  }) : _inspectionDatasource = inspectionDatasource;
+    required InspectionCache inspectionCache,
+  })  : _cache = inspectionCache,
+        _inspectionDatasource = inspectionDatasource;
 
   @override
-  Either<String, Inspection> getInspection(String projectId) {
-    final inspection = _inspectionDatasource.getInspectionById(projectId);
-    if (inspection == null) {
-      return Left('No existe una inspeccion con este id');
-    }
-    return Right(inspection.toEntity());
-  }
-
-  @override
-  Future<Inspection> createInspection(Inspection inspection) async {
+  Future<Inspection> saveInspection(Inspection inspection) async {
     InspectionModel inspectionModel = InspectionModel.fromEntity(inspection);
     _inspectionDatasource.saveInspection(inspectionModel);
-
+    cacheInspection(inspection.inspectionId, inspection);
     return inspectionModel.toEntity();
   }
 
@@ -37,6 +32,37 @@ class InspectionRepositoryImpl implements InspectionRepository {
     if (inspectionList.isEmpty) {
       return Left('No hay ninguna inspeccion en este proyecto');
     }
-    return Right(inspectionList.last.toEntity());
+
+    final inspection = inspectionList.last.toEntity();
+
+    cacheInspection(inspection.projectId, inspection);
+    return Right(inspection);
+  }
+
+  @override
+  Future<void> cacheInspection(String projectId, Inspection inspection) async {
+    _cache.save(projectId, inspection);
+  }
+
+  Future<Inspection?> _getCachedInspection(String inspectionId) async {
+    return _cache.get(inspectionId);
+  }
+
+  @override
+  Future<Either<String, Inspection>> getInspection(String inspectionId,
+      {bool forceRefresh = false}) async {
+    if (!forceRefresh) {
+      final cached = await _getCachedInspection(inspectionId);
+      if (cached != null) return Right(cached);
+    }
+
+    final inspection =
+        await _inspectionDatasource.getInspectionById(inspectionId);
+    if (inspection == null) return Left('No se encontro la inspeccion');
+
+    final inspectionEntity = inspection.toEntity();
+    cacheInspection(inspectionId, inspectionEntity);
+
+    return Right(inspectionEntity);
   }
 }

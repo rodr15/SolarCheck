@@ -110,7 +110,8 @@ class LandingEmptyProjects extends StatelessWidget {
                 ),
                 ElevatedButton(
                     onPressed: () =>
-                        context.goNamed(RouterConstants.createProject),
+                        context.pushNamed(RouterConstants.createProject),
+                    // context.pushNamed('CreateProject'),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

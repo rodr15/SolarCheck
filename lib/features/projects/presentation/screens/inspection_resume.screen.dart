@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:solar_check/core/config/di/injection.dart';
+import 'package:go_router/go_router.dart';
+import 'package:solar_check/core/config/router/router.constants.dart';
 import 'package:solar_check/core/presentation/widgets/global_widgets.dart';
 import 'package:solar_check/features/projects/domain/entities/section.entity.dart';
 import 'package:solar_check/features/projects/presentation/bloc/inspection/inspection_bloc.dart';
@@ -15,15 +16,17 @@ class InspectionResumeScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              context.pop();
+            },
+          ),
           title: Text('Resumen de la inspección'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: BlocProvider(
-            create: (context) =>
-                sl<InspectionBloc>()..add(InspectionEvent.started(projectId)),
-            child: InspectionResumeContent(),
-          ),
+          child: InspectionResumeContent(),
         ),
       ),
     );
@@ -48,12 +51,6 @@ class InspectionResumeContent extends StatelessWidget {
                 isTop: true,
               ),
             );
-            // return Column(
-            //   children: [
-            //     CollapsibleSectionWidget(
-            //         section: inspection.inspectionAnswers.first),
-            //   ],
-            // );
           },
           error: (error) =>
               Text('Error cargando el catalogo, por favor intentelo más tarde'),
@@ -108,8 +105,17 @@ class CollapsibleSectionWidget extends StatelessWidget {
       final SectionItem s => StepCard(
           title: s.title,
           sideExtraContent: ValidateStatusChip(status: s.status),
-          // onTap: ()=> context.goNamed(''),
-        ),
+          onTap: () {
+            final inspectionId = context.read<InspectionBloc>().state.maybeWhen(
+                  loaded: (i) => i.inspectionId,
+                  orElse: () => '',
+                );
+            context.pushNamed(
+              RouterConstants.inspectionCalification,
+              pathParameters: {'inspectionId': inspectionId},
+              extra: s,
+            );
+          }),
       _ => Text('Error'),
     };
   }

@@ -4,7 +4,10 @@ enum ValidationStatus {
   approved,
   notApproved,
   pending,
-  withoutValidation,
+  withoutValidation;
+
+  static List<ValidationStatus> get selectableValues =>
+      values.where((status) => status != withoutValidation).toList();
 }
 
 extension ValidationStatusExtension on ValidationStatus {
@@ -22,7 +25,7 @@ extension ValidationStatusExtension on ValidationStatus {
       case ValidationStatus.approved:
         return 'Aprobado';
       case ValidationStatus.notApproved:
-        return 'Fallo';
+        return 'No Aprobado';
       case ValidationStatus.pending:
         return 'Pendiente';
       case ValidationStatus.withoutValidation:
@@ -35,7 +38,7 @@ extension ValidationStatusExtension on ValidationStatus {
       case ValidationStatus.approved:
         return 'Apr.';
       case ValidationStatus.notApproved:
-        return 'Fal.';
+        return 'No Apr.';
       case ValidationStatus.pending:
         return 'Pen.';
       case ValidationStatus.withoutValidation:

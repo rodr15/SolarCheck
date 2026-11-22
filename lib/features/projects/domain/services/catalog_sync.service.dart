@@ -73,4 +73,31 @@ class CatalogSyncService {
     return Option.fromNullable(answersByTitle[catalogItem.title])
         .match(() => catalogItem, (answerItem) => answerItem);
   }
+
+  bool needsSync({
+    required List<Section> catalog,
+    required List<Section> answers,
+  }) {
+    final answersByTitle = {
+      for (final section in answers) section.title: section,
+    };
+
+    for (final section in catalog) {
+      final answerSection = answersByTitle[section.title];
+      if (answerSection == null || _itemsNeedSync(section, answerSection)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  bool _itemsNeedSync(Section section, Section answerSection) {
+    final answerTitles =
+        answerSection.getFlattenItems().map((item) => item.title).toSet();
+
+    return section
+        .getFlattenItems()
+        .any((item) => !answerTitles.contains(item.title));
+  }
 }

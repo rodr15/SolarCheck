@@ -9,7 +9,10 @@ class GetInspectionUsecase {
 
   GetInspectionUsecase(this._repository);
 
-  Future<Either<String, Inspection>> call(String id) async {
-    return _repository.getInspection(id);
+  Future<Either<String, Inspection>> call(
+    String id, {
+    bool forceRefresh = false,
+  }) async {
+    return _repository.getInspection(id, forceRefresh: forceRefresh);
   }
 }

@@ -65,8 +65,6 @@ class LandingContent extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
 
-                    // AQUÍ ESTÁ LA CLAVE: 'Expanded' le da un espacio delimitado
-                    // al SingleChildScrollView para que pueda hacer su trabajo de scroll.
                     Expanded(
                       child: projects.isEmpty
                           ? const LandingEmptyProjects()
@@ -96,8 +94,7 @@ class LandingProjects extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding:
-            const EdgeInsets.symmetric(vertical: 8.0), // Margen seguro general
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -106,49 +103,54 @@ class LandingProjects extends StatelessWidget {
               subTitle: '',
             ),
             const SizedBox(height: 8),
-            ...projects.map((p) => Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 6,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          p.name,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(fontWeight: FontWeight.bold),
+            ...projects.map((p) {
+              return Card(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 6,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        p.name,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      /* [ASRF] TODO: getLastinspectionAndPutHere */
+                      // Wrap(
+                      //   spacing: 8.0,
+                      //   runSpacing: 4.0,
+                      //   children: ValidationStatus.values
+                      //       .map((s) => ValidateStatusChip(
+                      //             status: s,
+                      //             shortText: true,
+                      //           ))
+                      //       .toList(),
+                      // ),
+                      const SizedBox(height: 12),
+                      ElevatedButton(
+                        onPressed: () => context.pushNamed(
+                          RouterConstants.inspectionResume,
+                          pathParameters: {'projectId': p.projectId},
                         ),
-                        const SizedBox(height: 8),
-                        Wrap(
-                          spacing: 8.0,
-                          runSpacing: 4.0,
-                          children: ValidationStatus.values
-                              .map((s) => ValidateStatusChip(
-                                    status: s,
-                                  ))
-                              .toList(),
-                        ),
-                        const SizedBox(height: 12),
-                        ElevatedButton(
-                          onPressed: () => context.goNamed(
-                              RouterConstants.inspectionResume,
-                              pathParameters: {'projectId': p.projectId}),
-                          child: const SizedBox(
-                            width: double.infinity,
-                            child: Center(
-                              child: Text('Continuar inspeccion'),
-                            ),
+                        child: const SizedBox(
+                          width: double.infinity,
+                          child: Center(
+                            child: Text('Continuar inspeccion'),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                )),
+                ),
+              );
+            }),
             const SizedBox(height: 12),
             Center(
               child: ElevatedButton(

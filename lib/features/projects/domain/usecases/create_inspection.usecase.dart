@@ -26,8 +26,7 @@ class CreateInspectionUseCase {
           updatedAt: DateTime.now(),
           inspectionAnswers: catalogAnswers,
         );
-        final createdInspection =
-            await _repository.createInspection(inspection);
+        final createdInspection = await _repository.saveInspection(inspection);
         return Left(createdInspection);
       },
     );
