@@ -50,6 +50,8 @@ class InspectionCalificationScaffold extends StatelessWidget {
           },
         ),
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
       ),
       body: const SafeArea(
         child: CalificationContent(),

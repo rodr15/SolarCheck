@@ -15,6 +15,9 @@ class AppTheme {
         surface: AppColors.surfaceLight,
       ),
       scaffoldBackgroundColor: AppColors.backgroundLight,
+      appBarTheme: AppBarTheme(
+        backgroundColor: AppColors.backgroundLight,
+      ),
       textTheme: TextTheme(
         headlineLarge: AppTypography.headline,
         bodyLarge: AppTypography.body,
