@@ -42,125 +42,138 @@ class CreateProjectContent extends StatelessWidget {
         builder: (context, state) {
           final bloc = context.read<RegisterProjectBloc>();
           String type = state.type.value;
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              spacing: 50,
-              children: [
-                Row(
+          return Scaffold(
+            appBar: AppBar(
+              title: Row(
+                spacing: 10,
+                children: [
+                  Icon(
+                    Icons.add_circle_outline_sharp,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  Text(
+                    'Crear un nuevo proyecto',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  spacing: 50,
                   children: [
-                    Icon(
-                      Icons.add_outlined,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    Text(
-                      'Crear un nuevo proyecto',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    TitleWithSubtitle(
-                      title: 'Nombre del proyecto',
-                      titleIcon: Icons.solar_power,
-                      subTitle: 'REQUERIDO',
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextField(
-                      onChanged: (name) =>
-                          bloc.add(RegisterProjectEvent.nameChanged(name)),
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.assignment_ind),
-                        labelText: 'Nombre del proyecto',
-                        hintText: 'Pegasus',
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
+                    Column(
                       children: [
-                        Icon(Icons.info_outline),
-                        SizedBox(
-                          width: 10,
+                        TitleWithSubtitle(
+                          title: 'Nombre del proyecto',
+                          titleIcon: Icons.solar_power,
+                          subTitle: 'REQUERIDO',
                         ),
-                        Text(
-                            'Identificador principal para tus reportes de inspección'),
-                      ],
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    TitleWithSubtitle(
-                      title: 'Tipo de proyecto',
-                      titleIcon: Icons.category_outlined,
-                      subTitle: 'PLANTILLA BASE',
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    OptionCard(
-                      text: 'Utility scale',
-                      value: 'Utility scale',
-                      isSelected: 'Utility scale' == type,
-                      icon: Icons.grid_view,
-                      color: Theme.of(context).colorScheme.primary,
-                      onClick: () => bloc.add(
-                        RegisterProjectEvent.typeChanged('Utility scale'),
-                      ),
-                    ),
-                    OptionCard(
-                      text: 'Generacion distribuida',
-                      value: 'Generacion distribuida',
-                      isSelected: 'Generacion distribuida' == type,
-                      icon: Icons.factory,
-                      color: Theme.of(context).colorScheme.primary,
-                      onClick: () => bloc.add(
-                        RegisterProjectEvent.typeChanged(
-                            'Generacion distribuida'),
-                      ),
-                    ),
-                    OptionCard(
-                      text: 'Autoconsumo',
-                      value: 'Autoconsumo',
-                      isSelected: 'Autoconsumo' == type,
-                      icon: Icons.house,
-                      color: Theme.of(context).colorScheme.primary,
-                      onClick: () => bloc.add(
-                        RegisterProjectEvent.typeChanged('Autoconsumo'),
-                      ),
-                    ),
-                  ],
-                ),
-                ElevatedButton(
-                  onPressed: state.isValid
-                      ? () => bloc.add(
-                            RegisterProjectEvent.formSubmitted(),
-                          )
-                      : null,
-                  child: state.status.isInProgress
-                      ? SizedBox(
-                          width: double.infinity,
-                          child: CircularProgressIndicator.adaptive(),
-                        )
-                      : Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 10,
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                          onChanged: (name) =>
+                              bloc.add(RegisterProjectEvent.nameChanged(name)),
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.assignment_ind),
+                            labelText: 'Nombre del proyecto',
+                            hintText: 'Pegasus',
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
                           children: [
-                            Icon(Icons.play_circle_fill_outlined),
-                            Text('Iniciar inspección'),
+                            Icon(Icons.info_outline),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Flexible(
+                              child: Text(
+                                  'Identificador principal para tus reportes de inspección'),
+                            ),
                           ],
                         ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        TitleWithSubtitle(
+                          title: 'Tipo de proyecto',
+                          titleIcon: Icons.category_outlined,
+                          subTitle: 'PLANTILLA BASE',
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        OptionCard(
+                          text: 'Utility scale',
+                          value: 'Utility scale',
+                          isSelected: 'Utility scale' == type,
+                          icon: Icons.grid_view,
+                          color: Theme.of(context).colorScheme.primary,
+                          onClick: () => bloc.add(
+                            RegisterProjectEvent.typeChanged('Utility scale'),
+                          ),
+                        ),
+                        OptionCard(
+                          text: 'Generacion distribuida',
+                          value: 'Generacion distribuida',
+                          isSelected: 'Generacion distribuida' == type,
+                          icon: Icons.factory,
+                          color: Theme.of(context).colorScheme.primary,
+                          onClick: () => bloc.add(
+                            RegisterProjectEvent.typeChanged(
+                                'Generacion distribuida'),
+                          ),
+                        ),
+                        OptionCard(
+                          text: 'Autoconsumo',
+                          value: 'Autoconsumo',
+                          isSelected: 'Autoconsumo' == type,
+                          icon: Icons.house,
+                          color: Theme.of(context).colorScheme.primary,
+                          onClick: () => bloc.add(
+                            RegisterProjectEvent.typeChanged('Autoconsumo'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: state.isValid
+                            ? () => bloc.add(
+                                  RegisterProjectEvent.formSubmitted(),
+                                )
+                            : null,
+                        child: state.status.isInProgress
+                            ? CircularProgressIndicator.adaptive(
+                                padding: EdgeInsets.all(4),
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.onPrimary,
+                              )
+                            : Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                spacing: 10,
+                                children: [
+                                  Icon(Icons.play_circle_fill_outlined),
+                                  Text('Iniciar inspección'),
+                                ],
+                              ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           );
         },

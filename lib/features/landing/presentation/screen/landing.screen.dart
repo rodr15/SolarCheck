@@ -6,7 +6,6 @@ import 'package:solar_check/core/config/router/router.constants.dart';
 import 'package:solar_check/core/presentation/widgets/global_widgets.dart';
 import 'package:solar_check/core/user/presentation/bloc/auth_bloc.dart';
 import 'package:solar_check/features/projects/domain/entities/project.entity.dart';
-import 'package:solar_check/features/projects/domain/entities/validation_status.dart';
 import 'package:solar_check/features/projects/presentation/bloc/projects/projects_bloc.dart';
 
 class LandingScreen extends StatelessWidget {
@@ -145,6 +144,21 @@ class LandingProjects extends StatelessWidget {
                             child: Text('Continuar inspeccion'),
                           ),
                         ),
+                      ),
+
+                      Row(
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: () {},
+                            label: Text('Enviar por Whatsapp'),
+                            icon: Icon(Icons.message),
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {},
+                            label: Text('Guardar en tu dispositivo'),
+                            icon: Icon(Icons.save),
+                          ),
+                        ],
                       ),
                     ],
                   ),
