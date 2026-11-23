@@ -1,0 +1,72 @@
+name: Android Beta Release
+
+on:
+  push:
+    branches:
+      - main
+
+# Necesario para que el Action pueda crear el Tag y publicar el Release
+permissions:
+  contents: write
+
+jobs:
+  build_and_release:
+    # Solo se ejecuta si el mensaje del commit empieza con "release:" o contiene "[release]"
+    if: startsWith(github.event.head_commit.message, 'release:') || contains(github.event.head_commit.message, '[release]')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Descargar código del repositorio
+        uses: actions/checkout@v4
+
+      - name: 2. Configurar Java 17 (Requerido por Android Gradle)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: 3. Configurar última versión estable de Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: 4. Instalar dependencias
+        run: flutter pub get
+
+      - name: 5. Ejecutar build_runner (Injectable)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: 6. Calcular versión automática desde pubspec.yaml
+        id: version
+        run: |
+          # Lee la versión del pubspec.yaml (ej. 1.0.0)
+          BASE_VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //' | cut -d'+' -f1 | tr -d ' ')
+          BUILD_NUMBER=${{ github.run_number }}
+          TAG_NAME="v${BASE_VERSION}-beta.${BUILD_NUMBER}"
+          
+          echo "base_version=$BASE_VERSION" >> $GITHUB_OUTPUT
+          echo "build_number=$BUILD_NUMBER" >> $GITHUB_OUTPUT
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: 7. Compilar APK Release (Beta)
+        run: |
+          flutter build apk --release \
+            --build-name=${{ steps.version.outputs.base_version }} \
+            --build-number=${{ steps.version.outputs.build_number }}
+
+      - name: 8. Renombrar APK con la versión
+        run: |
+          mv build/app/outputs/flutter-apk/app-release.apk \
+             build/app/outputs/flutter-apk/app-${{ steps.version.outputs.tag_name }}.apk
+
+      - name: 9. Crear Tag y publicar GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag_name }}
+          name: "Beta ${{ steps.version.outputs.tag_name }}"
+          body: |
+            ### Cambios en esta versión:
+            ${{ github.event.head_commit.message }}
+          prerelease: true
+          files: build/app/outputs/flutter-apk/app-${{ steps.version.outputs.tag_name }}.apk
