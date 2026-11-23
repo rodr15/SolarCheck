@@ -186,15 +186,19 @@ class ValidateStatusChip extends StatelessWidget {
     final statusText = shortText ? status.shortText : status.text;
     final text = optionalText ?? statusText;
 
-    return Chip(
-      avatar: Icon(status.icon, color: color, size: 18),
-      label: Text(text,
-          style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                color: color,
-                fontWeight: FontWeight.bold,
-              )),
-      backgroundColor: color.withValues(alpha: 0.1),
-      side: BorderSide.none,
+    return Tooltip(
+      message: status.text,
+      triggerMode: TooltipTriggerMode.tap,
+      child: Chip(
+        avatar: Icon(status.icon, color: color, size: 18),
+        label: Text(text,
+            style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                  color: color,
+                  fontWeight: FontWeight.bold,
+                )),
+        backgroundColor: color.withValues(alpha: 0.1),
+        side: BorderSide.none,
+      ),
     );
   }
 }

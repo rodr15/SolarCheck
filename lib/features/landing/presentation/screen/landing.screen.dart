@@ -5,7 +5,9 @@ import 'package:solar_check/core/config/di/injection.dart';
 import 'package:solar_check/core/config/router/router.constants.dart';
 import 'package:solar_check/core/presentation/widgets/global_widgets.dart';
 import 'package:solar_check/core/user/presentation/bloc/auth_bloc.dart';
+import 'package:solar_check/features/projects/domain/entities/inspection.entity.extension.dart';
 import 'package:solar_check/features/projects/domain/entities/project.entity.dart';
+import 'package:solar_check/features/projects/domain/entities/validation_status.dart';
 import 'package:solar_check/features/projects/presentation/bloc/projects/projects_bloc.dart';
 
 class LandingScreen extends StatelessWidget {
@@ -103,6 +105,7 @@ class LandingProjects extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             ...projects.map((p) {
+              final inspectionValues = p.inspection?.getValidationStatusQty();
               return Card(
                 margin: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -121,17 +124,23 @@ class LandingProjects extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
-                      /* [ASRF] TODO: getLastinspectionAndPutHere */
-                      // Wrap(
-                      //   spacing: 8.0,
-                      //   runSpacing: 4.0,
-                      //   children: ValidationStatus.values
-                      //       .map((s) => ValidateStatusChip(
-                      //             status: s,
-                      //             shortText: true,
-                      //           ))
-                      //       .toList(),
-                      // ),
+                      if (p.inspection != null)
+                        SizedBox(
+                          width: double.infinity,
+                          child: Wrap(
+                            alignment: WrapAlignment.center,
+                            runAlignment: WrapAlignment.center,
+                            spacing: 8.0,
+                            runSpacing: 4.0,
+                            children: ValidationStatus.values
+                                .map((s) => ValidateStatusChip(
+                                      status: s,
+                                      optionalText: '${inspectionValues![s]}',
+                                      shortText: true,
+                                    ))
+                                .toList(),
+                          ),
+                        ),
                       const SizedBox(height: 12),
                       ElevatedButton(
                         onPressed: () => context.pushNamed(
@@ -145,18 +154,27 @@ class LandingProjects extends StatelessWidget {
                           ),
                         ),
                       ),
-
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        spacing: 5,
                         children: [
-                          ElevatedButton.icon(
-                            onPressed: () {},
-                            label: Text('Enviar por Whatsapp'),
-                            icon: Icon(Icons.message),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () => context
+                                  .read<ProjectsBloc>()
+                                  .add(ProjectsEvent.share(p)),
+                              label: Text('Whatsapp'),
+                              icon: Icon(Icons.message),
+                            ),
                           ),
-                          ElevatedButton.icon(
-                            onPressed: () {},
-                            label: Text('Guardar en tu dispositivo'),
-                            icon: Icon(Icons.save),
+                          Expanded(
+                            child: ElevatedButton.icon(
+                              onPressed: () => context
+                                  .read<ProjectsBloc>()
+                                  .add(ProjectsEvent.download(p)),
+                              label: Text('Guardar'),
+                              icon: Icon(Icons.save),
+                            ),
                           ),
                         ],
                       ),

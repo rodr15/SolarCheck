@@ -1,16 +1,22 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
+import 'package:solar_check/features/projects/data/datasource/inspection.datasource.dart';
 import 'package:solar_check/features/projects/data/datasource/project.datasource.dart';
 import 'package:solar_check/features/projects/data/models/project.model.dart';
 import 'package:solar_check/features/projects/domain/entities/project.entity.dart';
+import 'package:solar_check/features/projects/domain/repositories/inspection.repository.dart';
 import 'package:solar_check/features/projects/domain/repositories/project.repository.dart';
 
 @LazySingleton(as: ProjectRepository)
 class ProjectRepositoryImpl implements ProjectRepository {
   final ProjectDataSource _dataSource;
+  final InspectionRepository _inspectionRepository;
 
-  const ProjectRepositoryImpl({required ProjectDataSource datasource})
-      : _dataSource = datasource;
+  const ProjectRepositoryImpl(
+      {required ProjectDataSource datasource,
+      required InspectionRepository inspectionRepository})
+      : _inspectionRepository = inspectionRepository,
+        _dataSource = datasource;
 
   @override
   Future<Either<String, Project>> getProjectById(String projectId) async {
@@ -19,7 +25,8 @@ class ProjectRepositoryImpl implements ProjectRepository {
       if (model == null) {
         return const Left('No se encontró el proyecto solicitado');
       }
-      return Right(model.toEntity());
+
+      return Right(await _addInspectionToProject(model.toEntity()));
     } catch (e) {
       return Left('Error al obtener el proyecto: $e');
     }
@@ -40,10 +47,22 @@ class ProjectRepositoryImpl implements ProjectRepository {
   Future<Either<String, List<Project>>> getAllProjects() async {
     try {
       final models = await _dataSource.getAllProjects();
-      final entities = models.map((model) => model.toEntity()).toList();
+      final entities = await Future.wait(
+        models.map((model) => _addInspectionToProject(model.toEntity())),
+      );
       return Right(entities);
     } catch (e) {
       return Left('Error al listar los proyectos: $e');
     }
+  }
+
+  Future<Project> _addInspectionToProject(Project project) async {
+    final inspection =
+        _inspectionRepository.getInspectionByProjectId(project.projectId);
+
+    if (inspection.isLeft()) {
+      return project;
+    }
+    return project.copyWith(inspection: inspection.getRight().toNullable());
   }
 }

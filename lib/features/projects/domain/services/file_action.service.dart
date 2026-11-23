@@ -1,30 +1,30 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
+import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-class FileActionService {
-  static Future<bool> guardarEnDispositivo({
-  required Uint8List bytes,
-  required String nombreArchivo, // Asegúrate de que termine en '.xlsx'
-}) async {
-  final Uri? rutaGuardada = await FilePicker.saveFile(
-    dialogTitle: 'Guardar reporte Excel',
-    fileName: nombreArchivo,
-    bytes: bytes,
-  );
-
-  return rutaGuardada != null;
-}
-
-
-  static Future<void> compartirArchivo({
+abstract class FileActionService {
+  static Future<bool> saveInPhone({
     required Uint8List bytes,
-    required String nombreArchivo,
+    required String fileName,
+  }) async {
+    final Uri? savedPath = await FilePicker.saveFile(
+      dialogTitle: 'Guardar reporte Excel',
+      fileName: '$fileName.xlsx',
+      bytes: bytes,
+    );
+
+    return savedPath != null;
+  }
+
+  static Future<void> shareFile({
+    required Uint8List bytes,
+    required String fileName,
   }) async {
     final tempDir = await getTemporaryDirectory();
-    final file = File('${tempDir.path}/$nombreArchivo');
+    final file = File('${tempDir.path}/$fileName');
     await file.writeAsBytes(bytes);
     await Share.shareXFiles(
       [XFile(file.path)],
