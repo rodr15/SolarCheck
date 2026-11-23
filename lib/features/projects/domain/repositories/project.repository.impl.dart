@@ -1,6 +1,5 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
-import 'package:solar_check/features/projects/data/datasource/inspection.datasource.dart';
 import 'package:solar_check/features/projects/data/datasource/project.datasource.dart';
 import 'package:solar_check/features/projects/data/models/project.model.dart';
 import 'package:solar_check/features/projects/domain/entities/project.entity.dart';
