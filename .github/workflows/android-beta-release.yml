@@ -52,6 +52,7 @@ jobs:
       - name: 7. Compilar APK Release (Beta)
         run: |
           flutter build apk --release \
+            --android-skip-build-dependency-validation \
             --build-name=${{ steps.version.outputs.base_version }} \
             --build-number=${{ steps.version.outputs.build_number }}
 
