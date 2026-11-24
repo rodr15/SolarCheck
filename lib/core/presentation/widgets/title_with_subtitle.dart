@@ -111,7 +111,6 @@ class LandingEmptyProjects extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () =>
                         context.pushNamed(RouterConstants.createProject),
-                    // context.pushNamed('CreateProject'),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -170,11 +169,14 @@ class ValidateStatusChip extends StatelessWidget {
   final ValidationStatus status;
   final String? optionalText;
   final bool shortText;
+  final bool showTooltip;
+
   const ValidateStatusChip({
     super.key,
     required this.status,
     this.optionalText,
     this.shortText = false,
+    this.showTooltip = true,
   });
 
   @override
@@ -186,19 +188,27 @@ class ValidateStatusChip extends StatelessWidget {
     final statusText = shortText ? status.shortText : status.text;
     final text = optionalText ?? statusText;
 
+    final chip = Chip(
+      avatar: Icon(status.icon, color: color, size: 18),
+      label: Text(
+        text,
+        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+              color: color,
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+      backgroundColor: color.withValues(alpha: 0.1),
+      side: BorderSide.none,
+    );
+
+    if (!showTooltip) {
+      return chip;
+    }
+
     return Tooltip(
       message: status.text,
       triggerMode: TooltipTriggerMode.tap,
-      child: Chip(
-        avatar: Icon(status.icon, color: color, size: 18),
-        label: Text(text,
-            style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                  color: color,
-                  fontWeight: FontWeight.bold,
-                )),
-        backgroundColor: color.withValues(alpha: 0.1),
-        side: BorderSide.none,
-      ),
+      child: chip,
     );
   }
 }

@@ -24,7 +24,7 @@ abstract class FileActionService {
     required String fileName,
   }) async {
     final tempDir = await getTemporaryDirectory();
-    final file = File('${tempDir.path}/$fileName');
+    final file = File('${tempDir.path}/$fileName.xlsx');
     await file.writeAsBytes(bytes);
     await Share.shareXFiles(
       [XFile(file.path)],

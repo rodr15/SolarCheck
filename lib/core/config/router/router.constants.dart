@@ -7,8 +7,10 @@ abstract final class RouterConstants {
   static String inspectionResume = 'InspectionResume';
   static String inspectionCalification = 'InspectionCalification';
 
-  static String getPath(String name) => '/${name.toLowerCase()}';
+  static String getPath(String name, {bool isSubRoute = false}) =>
+      '${isSubRoute ? '' : '/'}${name.toLowerCase()}';
   static String getPathWithPathParameters(
-          String name, List<String> pathParameters) =>
-      "/${getPath(name)}/${pathParameters.map((p) => ':$p').join('/')}";
+          String name, List<String> pathParameters,
+          {bool isSubRoute = false}) =>
+      "${getPath(name, isSubRoute: isSubRoute)}/${pathParameters.map((p) => ':$p').join('/')}";
 }

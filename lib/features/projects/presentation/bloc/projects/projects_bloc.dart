@@ -27,6 +27,7 @@ class ProjectsBloc extends Bloc<ProjectsEvent, ProjectsState> {
   }
 
   Future<void> _onLoad(_Load event, Emitter<ProjectsState> emit) async {
+    emit(_Loading());
     final projects = await _repository.getAllProjects();
 
     projects.fold(

@@ -5,6 +5,7 @@ import 'package:solar_check/core/config/router/router.constants.dart';
 import 'package:solar_check/core/presentation/widgets/global_widgets.dart';
 import 'package:solar_check/features/projects/domain/entities/section.entity.dart';
 import 'package:solar_check/features/projects/presentation/bloc/inspection/inspection_bloc.dart';
+import 'package:solar_check/features/projects/presentation/bloc/projects/projects_bloc.dart';
 
 class InspectionResumeScreen extends StatelessWidget {
   const InspectionResumeScreen({super.key, required this.projectId});
@@ -14,19 +15,19 @@ class InspectionResumeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              context.pop();
-            },
+      child: PopScope(
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          context.read<ProjectsBloc>().add(ProjectsEvent.load());
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Resumen de la inspección'),
           ),
-          title: Text('Resumen de la inspección'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: InspectionResumeContent(),
+          body: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: InspectionResumeContent(),
+          ),
         ),
       ),
     );
@@ -105,16 +106,25 @@ class CollapsibleSectionWidget extends StatelessWidget {
       final SectionItem s => StepCard(
           title: s.title,
           sideExtraContent: ValidateStatusChip(status: s.status),
-          onTap: () {
-            final inspectionId = context.read<InspectionBloc>().state.maybeWhen(
-                  loaded: (i) => i.inspectionId,
-                  orElse: () => '',
+          onTap: () async {
+            final inspection = context.read<InspectionBloc>().state.maybeWhen(
+                  loaded: (i) => i,
+                  orElse: () => null,
                 );
-            context.pushNamed(
+            await context.pushNamed(
               RouterConstants.inspectionCalification,
-              pathParameters: {'inspectionId': inspectionId},
+              pathParameters: {
+                'projectId': inspection!.projectId,
+                'inspectionId': inspection.inspectionId,
+              },
               extra: s,
             );
+
+            if (context.mounted) {
+              context
+                  .read<InspectionBloc>()
+                  .add(InspectionEvent.started(inspection.projectId));
+            }
           }),
       _ => Text('Error'),
     };

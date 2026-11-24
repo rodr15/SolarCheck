@@ -48,15 +48,18 @@ class InspectionExport {
   List<TextCellValue> _getHeaders() {
     return [
       TextCellValue('Item'),
-      ...ValidationStatus.values.map((v) => TextCellValue(v.text))
+      ...ValidationStatus.values.map((v) => TextCellValue(v.text)),
+      TextCellValue('Comentarios')
     ];
   }
 
   List<TextCellValue> _getItemInfo(SectionItem item) {
+    print('${item.title} - ${item.comments}');
     return [
       TextCellValue(item.title),
       ...ValidationStatus.values
-          .map((v) => TextCellValue(v == item.status ? 'X' : ''))
+          .map((v) => TextCellValue(v == item.status ? 'X' : '')),
+      TextCellValue(item.comments ?? ''),
     ];
   }
 }

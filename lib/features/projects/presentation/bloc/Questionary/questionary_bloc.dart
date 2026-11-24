@@ -74,7 +74,7 @@ class QuestionaryBloc extends Bloc<QuestionaryEvent, QuestionaryState> {
     Emitter<QuestionaryState> emit,
   ) async {
     if (_items.isEmpty || _currentIndex >= _items.length) {
-      await _finishAndSave(emit);
+      await _saveAndFinish(emit);
       return;
     }
 
@@ -97,11 +97,11 @@ class QuestionaryBloc extends Bloc<QuestionaryEvent, QuestionaryState> {
       _currentIndex = nextIndex;
       _emitCurrentItem(emit);
     } else {
-      await _finishAndSave(emit);
+      await _saveAndFinish(emit);
     }
   }
 
-  Future<void> _finishAndSave(Emitter<QuestionaryState> emit) async {
+  Future<void> _saveAndFinish(Emitter<QuestionaryState> emit) async {
     emit(const QuestionaryState.loading());
 
     await _saveInspectionUseCase.call(_inspection);
@@ -112,7 +112,7 @@ class QuestionaryBloc extends Bloc<QuestionaryEvent, QuestionaryState> {
     _ForceSaveInspection event,
     Emitter<QuestionaryState> emit,
   ) async {
-    _finishAndSave(emit);
+    await _saveInspectionUseCase.call(_inspection);
   }
 
   void _emitCurrentItem(Emitter<QuestionaryState> emit) {

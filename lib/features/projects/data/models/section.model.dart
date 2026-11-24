@@ -80,6 +80,7 @@ abstract class SectionItemModel extends SectionEntryModel
     @JsonKey(name: 'item') @Default('') String item,
     @JsonKey(name: 'couldHaveComments') bool? couldHaveComments,
     @JsonKey(name: 'status') String? status,
+    @JsonKey(name: 'comments') String? comments,
   }) = _SectionItemModel;
 
   factory SectionItemModel.fromJson(Map<String, dynamic> json) =>
@@ -91,12 +92,14 @@ abstract class SectionItemModel extends SectionEntryModel
         couldHaveComments: couldHaveComments ?? false,
         status: ValidationStatusExtension.fromText(status ?? '') ??
             ValidationStatus.withoutValidation,
+        comments: comments,
       );
 
   factory SectionItemModel.fromEntity(SectionItem entity) => SectionItemModel(
         item: entity.title,
         couldHaveComments: entity.couldHaveComments,
         status: entity.status.text,
+        comments: entity.comments,
       );
 }
 

@@ -7,6 +7,7 @@ import 'package:solar_check/core/presentation/widgets/global_widgets.dart';
 import 'package:solar_check/features/projects/domain/entities/section.entity.dart';
 import 'package:solar_check/features/projects/domain/entities/validation_status.dart';
 import 'package:solar_check/features/projects/presentation/bloc/Questionary/questionary_bloc.dart';
+import 'package:solar_check/features/projects/presentation/bloc/projects/projects_bloc.dart';
 
 class InspectionCalificationScreen extends StatelessWidget {
   const InspectionCalificationScreen({
@@ -40,21 +41,21 @@ class InspectionCalificationScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            context.read<QuestionaryBloc>().add(QuestionaryEvent.forceSave());
-            context.pop();
-          },
+    return PopScope(
+      onPopInvokedWithResult: (didPop, result) {
+        context.read<QuestionaryBloc>().add(QuestionaryEvent.forceSave());
+        if (didPop) return;
+        context.pop();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          surfaceTintColor: Colors.transparent,
         ),
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        surfaceTintColor: Colors.transparent,
-      ),
-      body: const SafeArea(
-        child: CalificationContent(),
+        body: const SafeArea(
+          child: CalificationContent(),
+        ),
       ),
     );
   }
@@ -99,7 +100,9 @@ class _CalificationContentState extends State<CalificationContent> {
               _commentsController.text = item.comments!;
             }
           },
-          finish: () => context.goNamed(RouterConstants.landing),
+          finish: () {
+            context.pushReplacementNamed(RouterConstants.landing);
+          },
         );
       },
       builder: (context, state) {

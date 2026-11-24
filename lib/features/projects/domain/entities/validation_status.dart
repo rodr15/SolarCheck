@@ -4,6 +4,7 @@ enum ValidationStatus {
   approved,
   notApproved,
   pending,
+  noApply,
   withoutValidation;
 
   static List<ValidationStatus> get selectableValues =>
@@ -30,6 +31,8 @@ extension ValidationStatusExtension on ValidationStatus {
         return 'Pendiente';
       case ValidationStatus.withoutValidation:
         return 'Sin Calificar';
+      case ValidationStatus.noApply:
+        return 'No Aplica';
     }
   }
 
@@ -43,6 +46,8 @@ extension ValidationStatusExtension on ValidationStatus {
         return 'Pen.';
       case ValidationStatus.withoutValidation:
         return 'Sin Cal.';
+      case ValidationStatus.noApply:
+        return 'No Apl';
     }
   }
 
@@ -56,6 +61,8 @@ extension ValidationStatusExtension on ValidationStatus {
         return Icons.warning;
       case ValidationStatus.withoutValidation:
         return Icons.circle_outlined;
+      case ValidationStatus.noApply:
+        return Icons.not_interested_rounded;
     }
   }
 
@@ -69,6 +76,8 @@ extension ValidationStatusExtension on ValidationStatus {
         return Colors.orange;
       case ValidationStatus.withoutValidation:
         return Colors.transparent;
+      case ValidationStatus.noApply:
+        return Colors.deepPurple;
     }
   }
 }

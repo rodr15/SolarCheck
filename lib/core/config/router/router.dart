@@ -64,11 +64,6 @@ GoRouter createRouter() {
     ],
     routes: [
       GoRoute(
-        name: RouterConstants.landing,
-        path: RouterConstants.getPath(RouterConstants.landing),
-        builder: (context, state) => const LandingScreen(),
-      ),
-      GoRoute(
         name: RouterConstants.loading,
         path: RouterConstants.getPath(RouterConstants.loading),
         builder: (context, state) => const LoadingScreen(),
@@ -79,48 +74,55 @@ GoRouter createRouter() {
         builder: (context, state) => const RegisterFormScreen(),
       ),
       GoRoute(
-        name: RouterConstants.createProject,
-        path: RouterConstants.getPath(RouterConstants.createProject),
-        builder: (context, state) => const CreateProject(),
-      ),
-      ShellRoute(
-        builder: (context, state, child) {
-          final projectId = state.pathParameters['projectId'] ?? '';
-          return BlocProvider(
-            create: (context) =>
-                sl<InspectionBloc>()..add(InspectionEvent.started(projectId)),
-            child: child,
-          );
-        },
-        routes: [
-          GoRoute(
-            name: RouterConstants.inspectionResume,
-            path: RouterConstants.getPathWithPathParameters(
-              RouterConstants.inspectionResume,
-              ['projectId'],
+          name: RouterConstants.landing,
+          path: RouterConstants.getPath(RouterConstants.landing),
+          builder: (context, state) {
+            return const LandingScreen();
+          },
+          routes: [
+            GoRoute(
+                name: RouterConstants.inspectionResume,
+                path: RouterConstants.getPathWithPathParameters(
+                  RouterConstants.inspectionResume,
+                  ['projectId'],
+                  isSubRoute: true,
+                ),
+                builder: (context, state) {
+                  final projectId = state.pathParameters['projectId'] ?? '';
+                  return BlocProvider(
+                    create: (context) => sl<InspectionBloc>()
+                      ..add(InspectionEvent.started(projectId)),
+                    child: InspectionResumeScreen(projectId: projectId),
+                  );
+                },
+                routes: [
+                  GoRoute(
+                    name: RouterConstants.inspectionCalification,
+                    path: RouterConstants.getPathWithPathParameters(
+                      RouterConstants.inspectionCalification,
+                      ['inspectionId'],
+                      isSubRoute: true,
+                    ),
+                    builder: (context, state) {
+                      final inspectionId =
+                          state.pathParameters['inspectionId'] ?? '';
+                      final selectedSection = state.extra as SectionItem?;
+                      return InspectionCalificationScreen(
+                        inspectionId: inspectionId,
+                        selectedSection: selectedSection,
+                      );
+                    },
+                  ),
+                ]),
+            GoRoute(
+              name: RouterConstants.createProject,
+              path: RouterConstants.getPath(
+                RouterConstants.createProject,
+                isSubRoute: true,
+              ),
+              builder: (context, state) => const CreateProject(),
             ),
-            builder: (context, state) {
-              final projectId = state.pathParameters['projectId'] ?? '';
-              return InspectionResumeScreen(projectId: projectId);
-            },
-          ),
-          GoRoute(
-            name: RouterConstants.inspectionCalification,
-            path: RouterConstants.getPathWithPathParameters(
-              RouterConstants.inspectionCalification,
-              ['inspectionId'],
-            ),
-            builder: (context, state) {
-              final inspectionId = state.pathParameters['inspectionId'] ?? '';
-              final selectedSection = state.extra as SectionItem?;
-              return InspectionCalificationScreen(
-                inspectionId: inspectionId,
-                selectedSection: selectedSection,
-              );
-            },
-          ),
-        ],
-      ),
+          ]),
     ],
     errorBuilder: (context, state) => NotFoundScreen(),
   );

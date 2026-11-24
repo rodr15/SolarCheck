@@ -137,16 +137,23 @@ class LandingProjects extends StatelessWidget {
                                       status: s,
                                       optionalText: '${inspectionValues![s]}',
                                       shortText: true,
+                                      showTooltip: true,
                                     ))
                                 .toList(),
                           ),
                         ),
                       const SizedBox(height: 12),
                       ElevatedButton(
-                        onPressed: () => context.pushNamed(
-                          RouterConstants.inspectionResume,
-                          pathParameters: {'projectId': p.projectId},
-                        ),
+                        onPressed: () async {
+                          await context.pushNamed(
+                              RouterConstants.inspectionResume,
+                              pathParameters: {'projectId': p.projectId});
+                          if (context.mounted) {
+                            context
+                                .read<ProjectsBloc>()
+                                .add(ProjectsEvent.load());
+                          }
+                        },
                         child: const SizedBox(
                           width: double.infinity,
                           child: Center(
