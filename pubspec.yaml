@@ -1,5 +1,5 @@
 name: solar_check
-description: "A new Flutter project."
+description: "Is a project to check the build of a Solar project"
 publish_to: 'none'
 
 version: 1.0.0+1
