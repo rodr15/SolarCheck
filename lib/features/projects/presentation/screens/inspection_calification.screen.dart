@@ -7,7 +7,6 @@ import 'package:solar_check/core/presentation/widgets/global_widgets.dart';
 import 'package:solar_check/features/projects/domain/entities/section.entity.dart';
 import 'package:solar_check/features/projects/domain/entities/validation_status.dart';
 import 'package:solar_check/features/projects/presentation/bloc/Questionary/questionary_bloc.dart';
-import 'package:solar_check/features/projects/presentation/bloc/projects/projects_bloc.dart';
 
 class InspectionCalificationScreen extends StatelessWidget {
   const InspectionCalificationScreen({
@@ -118,7 +117,10 @@ class _CalificationContentState extends State<CalificationContent> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     spacing: 12,
                     children: [
-                      _InspectionTitleCard(title: inspectionItem.title),
+                      _InspectionTitleCard(
+                        title: inspectionItem.title,
+                        parentTitle: inspectionItem.parentTitle,
+                      ),
                       Column(
                         spacing: 12,
                         children: [
@@ -158,9 +160,13 @@ class _CalificationContentState extends State<CalificationContent> {
 }
 
 class _InspectionTitleCard extends StatelessWidget {
-  const _InspectionTitleCard({required this.title});
+  const _InspectionTitleCard({
+    required this.title,
+    required this.parentTitle,
+  });
 
   final String title;
+  final String parentTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -170,14 +176,31 @@ class _InspectionTitleCard extends StatelessWidget {
         width: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Center(
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                parentTitle,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+              ),
+              SizedBox(
+                height: 150,
+                child: Center(
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
-            ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

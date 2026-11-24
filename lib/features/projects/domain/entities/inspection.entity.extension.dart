@@ -32,7 +32,6 @@ extension InspectionUpdateX on Inspection {
     };
 
     for (final item in getAllFlattenItems()) {
-      if (item.comments != null) print('${item.title} - ${item.comments}');
       statusQty[item.status] = (statusQty[item.status] ?? 0) + 1;
     }
 

@@ -16,16 +16,17 @@ abstract class Section extends SectionEntry with _$Section {
     required List<SectionEntry> items,
   }) = _Section;
 
-  List<SectionItem> getFlattenItems() {
+  List<SectionItem> getFlattenItems({String? parent}) {
     List<SectionItem> flattenItems = [];
 
     for (SectionEntry i in items) {
       if (i is Section) {
-        flattenItems.addAll(i.getFlattenItems());
+        flattenItems.addAll(i.getFlattenItems(parent: i.title));
         continue;
       }
       if (i is SectionItem) {
-        flattenItems.add(i);
+        final item = i.copyWith(parentTitle: parent ?? '');
+        flattenItems.add(item);
         continue;
       }
     }
@@ -42,5 +43,6 @@ abstract class SectionItem extends SectionEntry with _$SectionItem {
     @Default(false) bool couldHaveComments,
     String? comments,
     @Default(ValidationStatus.withoutValidation) ValidationStatus status,
+    @Default('') String parentTitle,
   }) = _SectionItem;
 }

@@ -54,7 +54,6 @@ class InspectionExport {
   }
 
   List<TextCellValue> _getItemInfo(SectionItem item) {
-    print('${item.title} - ${item.comments}');
     return [
       TextCellValue(item.title),
       ...ValidationStatus.values
